@@ -1,0 +1,2 @@
+rootProject.name='Cost Manager'
+include ':app'
