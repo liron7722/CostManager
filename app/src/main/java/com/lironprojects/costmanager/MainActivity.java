@@ -10,7 +10,7 @@ import com.lironprojects.costmanager.DB.CostManagerDB;
 import com.lironprojects.costmanager.DB.Names;
 
 public class MainActivity extends AppCompatActivity {
-private final static String indexURL = "file:///android_asset/index.html";
+private final static String indexURL = "file:///android_asset/templates/home.html";
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,5 +1,4 @@
 function test(){
-	document.write('test worked');
 	console.log('test worked');
 }
 

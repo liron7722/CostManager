@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Handler {
+public class RequestHandler {
     private CostManagerDB db;
     private static final String Command = "cmd";
     private static final String Table = "table";
@@ -20,7 +20,7 @@ public class Handler {
     private static final String Result = "data";
     private static final String Type = "type";
 
-    Handler(Context context){
+    RequestHandler(Context context){
         this.db = new CostManagerDB(context);
     }
 
