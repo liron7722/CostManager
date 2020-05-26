@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../static/main.css">
+    <link rel="stylesheet" type="text/css" href="../static/form.css">
     <title>Cost Manager</title>
 </head>
 
@@ -33,24 +34,34 @@
         </nav>
     </header>
     <main role="main" class="container">
-        <div>
-            <br><button class="getBalance" id="lastDay" onclick="changeurl()">Last Day</button>
-            <br><button class="getBalance" id="lastWeek">Last Week</button>
-            <br><button class="getBalance" id="lastMonth">Last Month</button>
-            <br><button class="getBalance" id="lastYear">Last Year</button>
-        </div>
-        <div>
-            <br><button class='Transaction' id="addTransaction">Add Transaction</button>
-            <br><button class='Transaction' id="getTransaction">My Transactions</button>
-        </div>
-        <div>
-            <br><button class='Profile' id="Profile">Profile></button>
-            <br><button class='Settings' id="Settings">Settings></button>
+        <div class="content-section">
+            <form name="loginForm" action="#" method="post">
+                <div class="container">
+                    <h1>Login</h1>
+                    <p>Please fill in this form to log in to your account.</p>
+                    <hr>
+                    <label for="email"><b>Email</b></label>
+                    <br>
+                    <input type="email" placeholder="Enter Email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" title="Must contain valid email address!" required>
+                    <br>
+                    <label for="password"><b>Password</b></label>
+                    <br>
+                    <input type="password" placeholder="Enter Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+                    <hr>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit" name="submit" value="Submit" onclick="login()">Sign In</button>
+                    </div>
+                </div>
+            </form>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Don't Have An Account? <a class="ml-2" href="register.html">Sign Up</a>
+                </small>
+            </div>
         </div>
     </main>
     <!-- jquery.mobile-1.4.5.js | jquery-3.5.0.min.js -->
     <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="../JS/jquery-3.5.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

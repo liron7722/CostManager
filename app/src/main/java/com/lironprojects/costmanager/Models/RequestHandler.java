@@ -20,7 +20,7 @@ public class RequestHandler {
     private static final String Result = "data";
     private static final String Type = "type";
 
-    RequestHandler(Context context){
+    public RequestHandler(Context context){
         this.db = new CostManagerDB(context);
     }
 
@@ -34,7 +34,7 @@ public class RequestHandler {
             JSONObject requestData = request.getJSONObject(Data);
             long result;
             switch (cmd) {
-                case "set":
+                case "insert":
                     switch (table) {
                         case Names.Profile_Table:
                             result = db.insertToProfileTable(requestData.getString(Names.Name), requestData.getString(Names.Password), requestData.getString(Names.Email));
