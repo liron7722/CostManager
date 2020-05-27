@@ -4,7 +4,7 @@ function login() {
 
     var info = { "email": email, "password": password }
 
-    var result = sendRequest('insert', 'Profile', info);
+    var result = sendRequest('get', 'Profile', info);
     if (result) {
         changeUrl('home.html');
         _id = 0;

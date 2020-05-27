@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../static/main.css">
+    <link rel="stylesheet" type="text/css" href="../static/form.css">
+    <title>Cost Manager - Add Transaction</title>
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggle">
+                    <div class="navbar-nav mr-auto">
+                        <a class="nav-item nav-link" href="home.html">Home</a>
+                        <a class="nav-item nav-link" href="about.html">About</a>
+                    </div>
+                    <!-- Navbar Right Side -->
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link" href="login.html">Login</a>
+                        <a class="nav-item nav-link" href="register.html">Register</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main role="main" class="container">
+        <div class="content-section">
+            <form name="registertionForm" action="#" method="post">
+                <div class="container">
+                    <h1>Add Transaction</h1>
+                    <p>Please fill this form to add a Transaction.</p>
+                    <hr>
+                    <label for="isincome"><b>Income?</b></label>
+                    <input type="checkbox" name="isincome" id="isincome">
+                    <label for="name"><b>Name</b></label>
+                    <input type="text" placeholder="Enter Transaction Name" name="name" id="name" required>
+                    <label for="category"><b>Category</b></label><br>
+                    <select name="category" id="category" required>
+                        <optgroup label="General">
+                            <option value="General">General</option>
+                        </optgroup>
+                        <optgroup label="Food">
+                            <option value="Supermarket">Supermarket</option>
+                            <option value="Restaurants">Restaurants</option>
+                        </optgroup>
+                        <optgroup label="Phone">
+                            <option value="Phone Accessories">Accessories</option>
+                            <option value="Phone Apps">Apps</option>
+                            <option value="Phone Repiar">Repiar</option>
+                            <option value="Phone Maintenance">Maintenance</option>
+                        </optgroup>
+                        <optgroup label="Cars">
+                            <option value="Gas">Gas</option>
+                            <option value="Car Repiar">Repiar</option>
+                            <option value="Car Maintenance">Maintenance</option>
+                        </optgroup>
+                    </select><br><br>
+                    <label for="date"><b>Date</b></label>
+                    <input type="date" name="date" id="date" required>
+                    <label for="amount"><b>Amount</b></label>
+                    <input type="number" placeholder="Enter Amount" name="amount" id="amount" required>
+                    <label for="price"><b>Price</b></label>
+                    <input type="number" placeholder="Enter Price" step=0.01 name="price" id="price" required>
+                    <button class="btn btn-outline-info" id="moreinfo">Show More</button><br><br>
+                    <div id="showmore">
+                        <label for="description"><b>Description</b></label>
+                        <input type="text" placeholder="Enter Description" step=0.01 name="description" id="description">
+                        <label for="currency"><b>Currency</b></label><br>
+                        <select name="currency" id="currency" required>
+                            <option value="USD">USD</option>
+                            <option value="NIS">NIS</option>
+                        </select><br><br>
+                        <label for="paymenttype"><b>Payment Type</b></label><br>
+                        <select name="paymenttype" id="paymenttype" required>
+                            <option value="Cash">Cash</option>
+                            <option value="Credit">Credit</option>
+                        </select><br><br>
+                        <label for="isrepeat"><b>Repeat?</b></label>
+                        <input type="checkbox" name="isrepeat" id="isrepeat">
+                        <div id="hidden">
+                            <label for="repeat">Repeats (between 1 and 60):</label>
+                            <input type="range" id="repeat" name="repeat" value="0" step="1" min="0" max="60">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit" name="submit" value="Submit" onclick="addTransaction()">Confirm</button>
+                    </div>
+                </div>
+            </form>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Already Have An Account? <a class="ml-2" href="login.html">Sign In</a>
+                </small>
+            </div>
+        </div>
+    </main>
+    <!-- jquery.mobile-1.4.5.js | jquery-3.5.0.min.js -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="../JS/jquery-3.5.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="../JS/costManager.js"></script>
+    <script src="../JS/addTransaction.js"></script>
+</body>
+
+</html>

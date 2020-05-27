@@ -16,8 +16,11 @@ public class ViewModel {
         this.handler = handler;
     }
 
+    @android.webkit.JavascriptInterface
     public JSONObject Request(JSONObject request) {
         return this.handler.handleRequest(request);
     }
 
+    @android.webkit.JavascriptInterface
+    public String mytest(){ return "liron";}
 }
