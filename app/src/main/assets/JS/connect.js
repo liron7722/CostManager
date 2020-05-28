@@ -5,8 +5,9 @@ var TransactionTableName = "Transactions"
 var SettingsTableName = "Settings"
 
 
-function sendRequest(cmd, tableName, data) {
-    alert("request Send")
-    var data = JSON.stringify({ "cmd": cmd, "tableName": tableName, "data": data });
-    return window.vm.Request(data);
+function sendRequest(cmd, tableName, info) {
+    var stringRequest = JSON.stringify({ "cmd": cmd, "table": tableName, "data": info });
+    var unParseResponse = window.vm.Request(stringRequest);
+    var response = JSON.parse(unParseResponse);
+    return response
 }

@@ -12,19 +12,21 @@ function validatePassword() {
 password.onchange = validatePassword;
 confirm_password.onkeyup = validatePassword;
 
-
 function register() {
     var name = document.getElementById("name").value;
     var email = document.getElementById("email").value;
-    var paswword = document.getElementById("password").value;
-    var info = { "name": name, "email": email, "password": password }
+    var password = document.getElementById("password").value;
+    var info = { "Name": name, "Email": email, "Password": password }
+    return JSON.stringify(info);
+}
 
-    var result = sendRequest('insert', 'Profile', info);
-    if (result) {
-        changeUrl('home.html');
-        _id = 0;
-    } else {
-        alert('Something went worng, please try again');
-        changeUrl('register.html');
+function handleResponse(response){
+    if (response.result) {
+        window.vm.updateSettings(response.data);
+        window.vm.loadStartPage();
+        window.vm.Toast("User created");
+    }
+    else {
+        window.vm.Toast('Something went wrong, please try again');
     }
 }

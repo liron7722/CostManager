@@ -3,18 +3,18 @@ package com.lironprojects.costmanager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.lironprojects.costmanager.Models.RequestHandler;
 import com.lironprojects.costmanager.ViewModels.ViewModel;
 
-import org.json.JSONObject;
-
 public class MainActivity extends AppCompatActivity {
-private final static String indexURL = "file:///android_asset/templates/home.html";
 private WebView webView;
 
     @Override
@@ -24,11 +24,11 @@ private WebView webView;
         setContentView(R.layout.webview);
         this.webView = new WebView(this);
         RequestHandler rh =  new RequestHandler(this);
-        ViewModel vm = new ViewModel(webView, rh);
-        webView.loadUrl(indexURL);
+        ViewModel vm = new ViewModel(this, webView, rh);
         webView.addJavascriptInterface(vm, "vm");
         webView.setWebViewClient(new WebViewClient());
         setContentView(webView);
+
     }
 
     @Override

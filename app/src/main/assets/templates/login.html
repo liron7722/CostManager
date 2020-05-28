@@ -35,7 +35,7 @@
     </header>
     <main role="main" class="container">
         <div class="content-section">
-            <form name="loginForm" action="#" method="post">
+            <form name="loginForm" onsubmit="signIn()" method="post">
                 <div class="container">
                     <h1>Login</h1>
                     <p>Please fill in this form to log in to your account.</p>
@@ -68,6 +68,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="../JS/connect.js"></script>
     <script src="../JS/login.js"></script>
+    <script>
+    function signIn(){
+        var info = login();
+        var response = sendRequest('get', 'Profile', info);
+        handleResponse(response);
+      }
+    </script>
 </body>
 
 </html>

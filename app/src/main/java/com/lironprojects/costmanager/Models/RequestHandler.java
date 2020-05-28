@@ -17,21 +17,30 @@ public class RequestHandler {
     private static final String Table = "table";
     private static final String Data = "data";
 
-    private static final String Result = "data";
+    private static final String Result = "result";
     private static final String Type = "type";
 
     public RequestHandler(Context context){
         this.db = new CostManagerDB(context);
     }
 
-    public JSONObject handleRequest(JSONObject request) {
+    public JSONObject handleRequest(String request){
+        try{
+            return handleRequest(new JSONObject(request));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JSONObject(); // TODO get proper response
+    }
+
+    private JSONObject handleRequest(JSONObject request) {
         JSONObject response = new JSONObject();
         try {
             String cmd = request.getString(Command);
             String table = request.getString(Table);
+            JSONObject requestData = new JSONObject(request.getString(Data));
             JSONObject data;
             JSONArray aData;
-            JSONObject requestData = request.getJSONObject(Data);
             long result;
             switch (cmd) {
                 case "insert":
@@ -90,9 +99,8 @@ public class RequestHandler {
 
     private void setResponse(JSONObject response, long result) throws JSONException {
         boolean success = result > 0;
-        String message = "Data";
         response.put(Result, success);
-        response.put(Type, message);
+        response.put(Type, "Data");
         response.put(Data, result);
     }
 
