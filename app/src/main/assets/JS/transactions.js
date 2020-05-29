@@ -1,4 +1,5 @@
-var data = [{
+var data = [
+    {
         "UserID": 1,
         "UserName": "rooter",
         "Password": "12345",
@@ -30,7 +31,7 @@ var data = [{
 
 function updateList(data) {
     $(document).ready(function() {
-        var table = '<table class="table table-striped"';
+        var table = '<table" class="table table-striped"';
 
         table += '<tr>';
         $.each(data[0], function(header, _) {

@@ -16,13 +16,13 @@ function register() {
     var name = document.getElementById("name").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    var info = { "Name": name, "Email": email, "Password": password }
+    var info = { "Name": name, "Email": email, "Password": password };
     return JSON.stringify(info);
 }
 
 function handleResponse(response){
     if (response.result) {
-        window.vm.updateSettings(response.data);
+        window.vm.updateSettings("id" ,parseInt(response.data));
         window.vm.loadStartPage();
         window.vm.Toast("User created");
     }

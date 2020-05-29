@@ -15,13 +15,13 @@ public class ViewModel {
     private static final String iC = "IncomeColor";
     private static final String eC = "ExpensesColor";
 
-    private final static String loginURL = "file:///android_asset/templates/login.html";
-    private final static String homeURL = "file:///android_asset/templates/home.html";
+    private static final String loginURL = "file:///android_asset/templates/login.html";
+    private static final String homeURL = "file:///android_asset/templates/home.html";
 
-    private final WebView view;
+    private WebView view;
     private final RequestHandler handler;
     private final Toast toast;
-    private final SharedPreferences sp;
+    private SharedPreferences sp;
 
     public ViewModel(Context context, WebView view, RequestHandler handler){
         this.view = view;
@@ -30,6 +30,7 @@ public class ViewModel {
         this.sp = context.getSharedPreferences(localSP , Context.MODE_PRIVATE);
         loadStartPage();
     }
+
 
     @android.webkit.JavascriptInterface
     public void loadStartPage(){
@@ -99,6 +100,4 @@ public class ViewModel {
     @android.webkit.JavascriptInterface
     public boolean updatePreferences(String stringRequest){ return true;}
 
-    @android.webkit.JavascriptInterface
-    public String mytest(){ return "liron";}
 }

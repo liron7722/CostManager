@@ -16,6 +16,7 @@ import com.lironprojects.costmanager.ViewModels.ViewModel;
 
 public class MainActivity extends AppCompatActivity {
 private WebView webView;
+private ViewModel vm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ private WebView webView;
         setContentView(R.layout.webview);
         this.webView = new WebView(this);
         RequestHandler rh =  new RequestHandler(this);
-        ViewModel vm = new ViewModel(this, webView, rh);
+        this.vm = new ViewModel(this, webView, rh);
         webView.addJavascriptInterface(vm, "vm");
         webView.setWebViewClient(new WebViewClient());
         setContentView(webView);

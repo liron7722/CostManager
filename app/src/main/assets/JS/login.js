@@ -1,15 +1,17 @@
 function login() {
     var email = document.getElementById("email").value;
-    var paswword = document.getElementById("password").value;
+    var password = document.getElementById("password").value;
+    var info = { "email": email, "password": password};
+    return info;
+}
 
-    var info = { "email": email, "password": password }
-
-    var result = sendRequest('get', 'Profile', info);
-    if (result) {
-        changeUrl('home.html');
-        _id = 0;
-    } else {
-        alert('Something went worng, please try again');
-        changeUrl('register.html');
+function handleResponse(response){
+    if (response.result) {
+        window.vm.updateSettings("id" ,parseInt(response.data));
+        window.vm.loadStartPage();
+        window.vm.Toast("logged in successfully");
+    }
+    else {
+        window.vm.Toast("Couldn't logged in, check credentials");
     }
 }

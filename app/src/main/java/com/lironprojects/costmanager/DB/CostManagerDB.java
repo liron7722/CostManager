@@ -27,18 +27,7 @@ public class CostManagerDB{
         return id;
     }
 
-    public long insertToSettingsTable(int id, double weeklyBudget, String incomeColor, String expensesColor) {
-        ContentValues values = new ContentValues();
-        values.put(Names.UID, id);
-        values.put(Names.WeeklyBudget, weeklyBudget);
-        values.put(Names.IncomeColor, incomeColor);
-        values.put(Names.ExpensesColor, expensesColor);
-        long result = this.DBHelper.getWritableDatabase().insert(Names.Settings_Table, null, values);
-        this.DBHelper.close();
-        return result;
-    }
-
-    public long insertToTransactionTable(int id, String date, int amount, String name, double price, boolean isRepeat, boolean isIncome,
+    public long insertToTransactionTable(int id, String date, int amount, String name, double price, boolean isIncome,
                                          String category, String currency, String description, String paymentType) {
         ContentValues values = new ContentValues();
         values.put(Names.UID, id);
@@ -46,7 +35,6 @@ public class CostManagerDB{
         values.put(Names.Amount, amount);
         values.put(Names.TName, name);
         values.put(Names.Price, price);
-        values.put(Names.isRepeat, isRepeat);
         values.put(Names.isIncome, isIncome);
         values.put(Names.Category, category);
         values.put(Names.Currency, currency);
@@ -93,19 +81,6 @@ public class CostManagerDB{
         return jo;
     }
 
-    public JSONObject getDataFromSettingsTable(@NonNull Cursor cursor){
-        JSONObject jo = new JSONObject();
-        try {
-            jo.put(Names.UID, cursor.getInt(1));
-            jo.put(Names.WeeklyBudget, cursor.getString(2));
-            jo.put(Names.IncomeColor, cursor.getInt(3));
-            jo.put(Names.ExpensesColor, cursor.getString(4));
-            } catch (JSONException e){
-            System.out.println("Error\n" + e.getMessage());
-        }
-        return jo;
-    }
-
     public JSONArray getDataFromTransactionsTable(@NonNull Cursor cursor) {
         JSONArray ja = new JSONArray();
         while (cursor.moveToNext()){
@@ -117,12 +92,11 @@ public class CostManagerDB{
                 jo.put(Names.Amount, cursor.getInt(4));
                 jo.put(Names.TName, cursor.getString(5));
                 jo.put(Names.Price, cursor.getDouble(6));
-                jo.put(Names.isRepeat, cursor.getString(7));
-                jo.put(Names.isIncome, cursor.getString(8));
-                jo.put(Names.Category, cursor.getString(9));
-                jo.put(Names.Currency, cursor.getString(10));
-                jo.put(Names.Description, cursor.getString(11));
-                jo.put(Names.PaymentType, cursor.getString(12));
+                jo.put(Names.isIncome, cursor.getString(7));
+                jo.put(Names.Category, cursor.getString(8));
+                jo.put(Names.Currency, cursor.getString(9));
+                jo.put(Names.Description, cursor.getString(10));
+                jo.put(Names.PaymentType, cursor.getString(11));
             } catch (JSONException e) {
                 System.out.println("Error\n" + e.getMessage());
             }

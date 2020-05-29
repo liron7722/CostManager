@@ -49,14 +49,9 @@ public class RequestHandler {
                             result = db.insertToProfileTable(requestData.getString(Names.Name), requestData.getString(Names.Password), requestData.getString(Names.Email));
                             setResponse(response, result);
                             break;
-                        case Names.Settings_Table:
-                            result = db.insertToSettingsTable(requestData.getInt(Names.UID), requestData.getDouble(Names.WeeklyBudget),
-                                    requestData.getString(Names.IncomeColor), requestData.getString(Names.ExpensesColor));
-                            setResponse(response, result);
-                            break;
                         case Names.Transactions_Table:
                             result = db.insertToTransactionTable(requestData.getInt(Names.UID), requestData.getString(Names.Date), requestData.getInt(Names.Amount),
-                                    requestData.getString(Names.TName), requestData.getDouble(Names.Price), requestData.getBoolean(Names.isRepeat), requestData.getBoolean(Names.isIncome),
+                                    requestData.getString(Names.TName), requestData.getDouble(Names.Price), requestData.getBoolean(Names.isIncome),
                                     requestData.getString(Names.Category), requestData.getString(Names.Currency), requestData.getString(Names.Description), requestData.getString(Names.PaymentType));
                             setResponse(response, result);
                             break;
@@ -69,10 +64,6 @@ public class RequestHandler {
                     switch (table) {
                         case Names.Profile_Table:
                             data = db.getDataFromProfileTable(cursor);
-                            response.put(Data, data);
-                            break;
-                        case Names.Settings_Table:
-                            data = db.getDataFromSettingsTable(cursor);
                             response.put(Data, data);
                             break;
                         case Names.Transactions_Table:

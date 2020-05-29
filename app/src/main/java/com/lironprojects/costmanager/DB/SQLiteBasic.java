@@ -16,7 +16,6 @@ public class SQLiteBasic extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         try {
             this.createProfileTable(db);
-            this.createSettingsTable(db);
             this.createTransactionTable(db);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -50,16 +49,6 @@ public class SQLiteBasic extends SQLiteOpenHelper {
         db.execSQL(sql);
     }
 
-    private void createSettingsTable(SQLiteDatabase db){
-        String sql = "CREATE TABLE " + Names.Settings_Table + " ("
-                + Names.UID + " integer REFERENCES " + Names.Profile_Table + "("+ Names.UID +")"
-                + ", " + Names.WeeklyBudget + " text NOT NULL"
-                + ", " + Names.IncomeColor + " text NOT NULL"
-                + ", " + Names.ExpensesColor + " text NOT NULL"
-                + ");";
-        db.execSQL(sql);
-    }
-
     private void createTransactionTable(SQLiteDatabase db){
         String sql = "CREATE TABLE " + Names.Transactions_Table + " ("
                 + Names.UID + " integer NOT NULL" //FOREIGN KEY REFERENCES profile(id)"
@@ -68,7 +57,6 @@ public class SQLiteBasic extends SQLiteOpenHelper {
                 + ", " + Names.Amount + " integer NOT NULL"
                 + ", " + Names.TName + " text NOT NULL"
                 + ", " + Names.Price + " double NOT NULL"
-                + ", " + Names.isRepeat + " real NOT NULL"
                 + ", " + Names.isIncome + " real NOT NULL"
                 + ", " + Names.Category + " text"
                 + ", " + Names.Currency + " text"

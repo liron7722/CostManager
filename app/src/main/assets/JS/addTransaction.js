@@ -2,7 +2,6 @@ $("#hidden").hide();
 $("#showmore").hide();
 
 $("#moreinfo").click(function() {
-
     $("#showmore").show();
     $("#moreinfo").hide();
 });
@@ -20,24 +19,29 @@ $("#isrepeat").click(function() {
 function addTransaction() {
     var name = document.getElementById("name").value;
     var category = document.getElementById("category").value;
-    var isincome = document.getElementById("isincome").value;
+    var isIncome = document.getElementById("isincome").value;
     var date = document.getElementById("date").value;
     var amount = document.getElementById("amount").value;
     var price = document.getElementById("price").value;
     var currency = document.getElementById("currency").value;
-    var paymenttype = document.getElementById("paymenttype").value;
+    var paymentType = document.getElementById("paymenttype").value;
     var description = document.getElementById("description").value;
-    var isrepeat = document.getElementById("isrepeat").value;
+    var isRepeat = document.getElementById("isrepeat").value;
     var repeat = document.getElementById("repeat").value;
 
-    var info = { "name": name, "email": email, "password": password }
+    var info = {"TName": name, "Category": category, "isIncome": isIncome,
+                "Date": date, "Amount": amount, "Price": price,
+                "Currency": currency, "PaymentType": paymentType, "Description": description};
+    return [info, isRepeat, repeat];
+}
 
-    var result = sendRequest('insert', 'Profile', info);
-    if (result) {
-        changeUrl('home.html');
-        _id = 0;
-    } else {
-        alert('Something went worng, please try again');
-        changeUrl('register.html');
+function handleResponse(response){
+    if (response.result) {
+        window.vm.updateSettings("id" ,parseInt(response.data));
+        window.vm.loadStartPage();
+        window.vm.Toast("Added successfully");
+    }
+    else {
+        window.vm.Toast('Something went wrong, please try again');
     }
 }
