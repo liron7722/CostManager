@@ -17,6 +17,7 @@ $("#isrepeat").click(function() {
 
 
 function addTransaction() {
+    var id = parseInt(window.vm.getSettings("id"));
     var name = document.getElementById("name").value;
     var category = document.getElementById("category").value;
     var isIncome = document.getElementById("isincome").value;
@@ -29,7 +30,7 @@ function addTransaction() {
     var isRepeat = document.getElementById("isrepeat").value;
     var repeat = document.getElementById("repeat").value;
 
-    var info = {"TName": name, "Category": category, "isIncome": isIncome,
+    var info = {"id": id, "TName": name, "Category": category, "isIncome": isIncome,
                 "Date": date, "Amount": amount, "Price": price,
                 "Currency": currency, "PaymentType": paymentType, "Description": description};
     return [info, isRepeat, repeat];

@@ -114,13 +114,15 @@
         function add(){
             var response;
             var info = addTransaction();
+            var tempName = info[0].TName;
             if (info[1]){
             for(i = 1; i <= info[2]; i++) {
-                info[0].TName += " - " + i.toString()
+                info[0].TName = tempName + " - " + i.toString()
                 response = sendRequest('insert', 'Transactions', info[0]);
             }
-            else
+            else{
                 response = sendRequest('insert', 'Transactions', info[0]);
+            }
             handleResponse(response);
         }
     </script>

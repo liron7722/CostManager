@@ -35,14 +35,20 @@
             </div>
         </nav>
     </header>
-    <main role="main" class="container">
-        <div>
-            <br><button class="getBalance" id="report">Balance Report</button>
+    <main role="main" class="d-flex align-items-center flex-column" id=main>
+        <div class="p-2">
+            <button class="getBalance" id="report">Balance Report</button>
         </div>
-        <div>
-            <br><button class='Transaction' id="addTransaction">Add Transaction</button>
-            <br><button class='Transaction' id="getTransaction">My Transactions</button>
+        <div class="p-2">
+            <button class='Transaction' id="addTransaction">Add Transaction</button>
         </div>
+        <div class="p-2">
+            <button class='Transaction' id="getTransaction">My Transactions</button>
+        </div>
+        <div class="p-2">
+            <button class="test" id="test" onclick="window.vm.test()">Test</button>
+        </div>
+        <br>
     </main>
     <!-- jquery.mobile-1.4.5.js | jquery-3.5.0.min.js -->
     <!-- Optional JavaScript -->

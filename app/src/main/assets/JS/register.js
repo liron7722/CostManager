@@ -16,17 +16,12 @@ function register() {
     var name = document.getElementById("name").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    var info = { "Name": name, "Email": email, "Password": password };
-    return JSON.stringify(info);
+    var info = JSON.stringify({ "Name": name, "Email": email, "Password": password });
+    var stringRequest = JSON.stringify({ "cmd": 'insert', "table": 'Profile', "data": info });
+    window.vm.Request(stringRequest);
 }
 
 function handleResponse(response){
-    if (response.result) {
-        window.vm.updateSettings("id" ,parseInt(response.data));
+    if (response)
         window.vm.loadStartPage();
-        window.vm.Toast("User created");
-    }
-    else {
-        window.vm.Toast('Something went wrong, please try again');
-    }
 }

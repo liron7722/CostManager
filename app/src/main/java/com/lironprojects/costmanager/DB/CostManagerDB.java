@@ -22,13 +22,15 @@ public class CostManagerDB{
         values.put(Names.Name, name);
         values.put(Names.Password, password);
         values.put(Names.Email, email);
-        long id = this.DBHelper.getWritableDatabase().insert(Names.Profile_Table, null, values);
+        long id = this.DBHelper.getWritableDatabase().insert(Names.Profile_Table,
+                                                            null, values);
         this.DBHelper.close();
         return id;
     }
 
-    public long insertToTransactionTable(int id, String date, int amount, String name, double price, boolean isIncome,
-                                         String category, String currency, String description, String paymentType) {
+    public void insertToTransactionTable(int id, String date, int amount, String name, double price,
+                                         boolean isIncome, String category, String currency,
+                                         String description, String paymentType) {
         ContentValues values = new ContentValues();
         values.put(Names.UID, id);
         values.put(Names.Date, date);
@@ -40,23 +42,21 @@ public class CostManagerDB{
         values.put(Names.Currency, currency);
         values.put(Names.Description, description);
         values.put(Names.PaymentType, paymentType);
-        long transactionID = this.DBHelper.getWritableDatabase().insert(Names.Transactions_Table, null, values);
+        this.DBHelper.getWritableDatabase().insert(Names.Transactions_Table, null, values);
         this.DBHelper.close();
-        return transactionID;
     }
 
     @NonNull
-    public Cursor query(String TABLE_NAME, String whereClause, String[] whereArgs){
+    public Cursor query(String TABLE_NAME, String[] columns, String whereClause, String[] whereArgs){
         Cursor cursor = this.DBHelper.getWritableDatabase().query(
                 TABLE_NAME,     // The table to query
-                null,  // The array of columns to return (pass null to get all)
+                columns,  // The array of columns to return (pass null to get all)
                 whereClause,      // The columns for the WHERE clause
                 whereArgs,  // The values for the WHERE clause
                 null,  // don't group the rows
                 null,   // don't filter by row groups
                 null   // The sort order
         );
-        cursor.close();
         return cursor;
     }
 
@@ -68,40 +68,32 @@ public class CostManagerDB{
         return this.DBHelper.getWritableDatabase().delete(TABLE_NAME,whereClause, whereArgs);
     }
 
-    public JSONObject getDataFromProfileTable(@NonNull Cursor cursor){
-        JSONObject jo = new JSONObject();
-        try {
-                jo.put(Names.UID, cursor.getInt(1));
-                jo.put(Names.Name, cursor.getString(2));
-                jo.put(Names.Password, cursor.getInt(3));
-                jo.put(Names.Email, cursor.getString(4));
-            } catch (JSONException e){
-            System.out.println("Error\n" + e.getMessage());
-        }
-        return jo;
+    public int getDataFromProfileTable(@NonNull Cursor cursor){
+        return cursor.getInt(1);
     }
 
     public JSONArray getDataFromTransactionsTable(@NonNull Cursor cursor) {
         JSONArray ja = new JSONArray();
-        while (cursor.moveToNext()){
-            JSONObject jo = new JSONObject();
-            try {
-                jo.put(Names.UID, cursor.getInt(1));
-                jo.put(Names.TID, cursor.getInt(2));
-                jo.put(Names.Date, cursor.getString(3));
-                jo.put(Names.Amount, cursor.getInt(4));
-                jo.put(Names.TName, cursor.getString(5));
-                jo.put(Names.Price, cursor.getDouble(6));
-                jo.put(Names.isIncome, cursor.getString(7));
-                jo.put(Names.Category, cursor.getString(8));
-                jo.put(Names.Currency, cursor.getString(9));
-                jo.put(Names.Description, cursor.getString(10));
-                jo.put(Names.PaymentType, cursor.getString(11));
-            } catch (JSONException e) {
-                System.out.println("Error\n" + e.getMessage());
+
+            while (cursor.moveToNext()){
+                JSONObject jo = new JSONObject();
+                try {
+                    jo.put(Names.TID, cursor.getInt(2));
+                    jo.put(Names.Date, cursor.getString(3));
+                    jo.put(Names.Category, cursor.getString(8));
+                    jo.put(Names.TName, cursor.getString(5));
+                    jo.put(Names.Amount, cursor.getInt(4));
+                    jo.put(Names.Price, cursor.getDouble(6));
+                    jo.put(Names.Currency, cursor.getString(9));
+                    jo.put(Names.Description, cursor.getString(10));
+                    jo.put(Names.isIncome, cursor.getString(7));
+                    jo.put(Names.PaymentType, cursor.getString(11));
+                    ja.put(jo);
+                } catch (/*JSONException |*/ Exception e) {
+                    System.out.println("Error in cursor\n" + e.getMessage());
+                }
             }
-            ja.put(jo);
-        }
+        cursor.close();
         return ja;
     }
 

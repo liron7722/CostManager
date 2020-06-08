@@ -1,7 +1,6 @@
 package com.lironprojects.costmanager.DB;
 
 public class Names {
-    protected static final String DATABASE_NAME = "CostManager.db";    // Database Name
 
     /* Tables */
     public static final String Profile_Table = "Profile";
@@ -9,14 +8,14 @@ public class Names {
     public static final String[] Table_Names = {Profile_Table, Transactions_Table};
 
     /* Profile Table */
-    public static final String UID = "_id";
+    public static final String UID = "id";
     public static final String Name = "Name";
     public static final String Password = "Password";
     public static final String Email = "Email";
     protected static final String[] Profile_cols = {UID, Name, Password, Email};
 
     /* Transactions Table */
-    public static final String TID = "_tid";
+    public static final String TID = "tid";
     public static final String Date = "Date";
     public static final String Amount = "Amount";
     public static final String TName = "TName";
@@ -29,5 +28,12 @@ public class Names {
     protected static final String[] Transactions_cols = {UID, TID, Amount, TName, Price,
                                             isIncome, Category, Currency, Description, PaymentType};
 
+    public static final String Command = "cmd";
+    public static final String Table = "table";
+    public static final String Data = "data";
+
+    public static final String ResultMsg = "toast";
+    public static final String URL = "url";
+    public static final String newID = "newID";
 
 }

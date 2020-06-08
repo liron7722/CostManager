@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class SQLiteBasic extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = Names.DATABASE_NAME;    // Database Name
+    private static final String DATABASE_NAME = "CostManager.db";    // Database Name
     private static final int DATABASE_Version = 1;    // Database Version
 
     SQLiteBasic(Context context) {
@@ -44,7 +44,7 @@ public class SQLiteBasic extends SQLiteOpenHelper {
                 + Names.UID + " integer PRIMARY KEY AUTOINCREMENT"
                 + ", " + Names.Password + " text NOT NULL"
                 + ", " + Names.Name + " text NOT NULL"
-                + ", " + Names.Email + " text NOT NULL"
+                + ", " + Names.Email + " text NOT NULL Unique"
                 + ");";
         db.execSQL(sql);
     }
@@ -58,10 +58,10 @@ public class SQLiteBasic extends SQLiteOpenHelper {
                 + ", " + Names.TName + " text NOT NULL"
                 + ", " + Names.Price + " double NOT NULL"
                 + ", " + Names.isIncome + " real NOT NULL"
-                + ", " + Names.Category + " text"
-                + ", " + Names.Currency + " text"
-                + ", " + Names.Description + " text"
-                + ", " + Names.PaymentType + " text"
+                + ", " + Names.Category + " text NOT NULL"
+                + ", " + Names.Currency + " text NOT NULL"
+                + ", " + Names.Description + " text NOT NULL"
+                + ", " + Names.PaymentType + " text NOT NULL"
                 + ");";
         db.execSQL(sql);
     }

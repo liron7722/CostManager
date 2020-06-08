@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebView;
@@ -15,34 +14,38 @@ import com.lironprojects.costmanager.Models.RequestHandler;
 import com.lironprojects.costmanager.ViewModels.ViewModel;
 
 public class MainActivity extends AppCompatActivity {
-private WebView webView;
-private ViewModel vm;
+
+    private WebView webView;
+    private static final String localSP ="com.lironprojects.costmanager.Settings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.webview);
         this.webView = new WebView(this);
-        RequestHandler rh =  new RequestHandler(this);
-        this.vm = new ViewModel(this, webView, rh);
-        webView.addJavascriptInterface(vm, "vm");
-        webView.setWebViewClient(new WebViewClient());
-        setContentView(webView);
+        this.webView.setWebViewClient(new WebViewClient());
+
+        ViewModel vm = new ViewModel();
+        vm.setModel(new RequestHandler(this));
+        vm.setView(this.webView);
+        vm.setToast(Toast.makeText(this, "", Toast.LENGTH_SHORT));
+        vm.setSP(getSharedPreferences(localSP , Context.MODE_PRIVATE));
+        vm.loadStartPage();
+
+        this.webView.addJavascriptInterface(vm, "vm");
+        setContentView(this.webView);
 
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
         this.webView.getSettings().setJavaScriptEnabled(false);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public void onResume()
-    {
+    public void onResume(){
         super.onResume();
         this.webView.getSettings().setJavaScriptEnabled(true);
     }
