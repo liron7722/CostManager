@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class CostManagerDB{
     private SQLiteBasic DBHelper;
 
@@ -24,7 +26,7 @@ public class CostManagerDB{
         values.put(Names.Email, email);
         long id = this.DBHelper.getWritableDatabase().insert(Names.Profile_Table,
                                                             null, values);
-        this.DBHelper.close();
+        //this.DBHelper.close();
         return id;
     }
 
@@ -43,58 +45,62 @@ public class CostManagerDB{
         values.put(Names.Description, description);
         values.put(Names.PaymentType, paymentType);
         this.DBHelper.getWritableDatabase().insert(Names.Transactions_Table, null, values);
-        this.DBHelper.close();
+        //this.DBHelper.close();
     }
 
-    @NonNull
     public Cursor query(String TABLE_NAME, String[] columns, String whereClause, String[] whereArgs){
-        Cursor cursor = this.DBHelper.getWritableDatabase().query(
+        System.out.println("query values:");
+        System.out.println("table: " + TABLE_NAME + ", columns: " + Arrays.toString(columns) + ", whereClause: " + whereClause + ", whereArgs: " + Arrays.toString(whereArgs));
+        return this.DBHelper.getWritableDatabase().query(
                 TABLE_NAME,     // The table to query
                 columns,  // The array of columns to return (pass null to get all)
-                whereClause,      // The columns for the WHERE clause
-                whereArgs,  // The values for the WHERE clause
+                null,      // The columns for the WHERE clause
+                null,//whereArgs,  // The values for the WHERE clause
                 null,  // don't group the rows
                 null,   // don't filter by row groups
                 null   // The sort order
         );
-        return cursor;
     }
 
     public int update(String TABLE_NAME, ContentValues values, String whereClause, String[] whereArgs){
+        //values = {key1: "", key2: "", key3: ""}, whereClause = Names.UID + " = ?", whereArgs = { num as string}
+        //values = {key1: "", key2: "", key3: ""}, whereClause = Names.TID + " = ?", whereArgs = { num as string}
         return this.DBHelper.getWritableDatabase().update(TABLE_NAME, values, whereClause, whereArgs);
     }
 
     public int delete(String TABLE_NAME, String whereClause, String[] whereArgs){
+        //whereClause = Names.UID + " = ?", whereArgs = { num as string}
+        //whereClause = Names.TID + " = ?", whereArgs = { num as string}
         return this.DBHelper.getWritableDatabase().delete(TABLE_NAME,whereClause, whereArgs);
     }
 
-    public int getDataFromProfileTable(@NonNull Cursor cursor){
-        return cursor.getInt(1);
+    public int getDataFromProfileTable(Cursor cursor){
+        return cursor.getInt(cursor.getColumnIndex(Names.UID));
     }
 
-    public JSONArray getDataFromTransactionsTable(@NonNull Cursor cursor) {
+    public JSONObject getDataFromTransactionsTable(Cursor cursor) {
+        JSONObject result = new JSONObject();
         JSONArray ja = new JSONArray();
-
+        try {
             while (cursor.moveToNext()){
                 JSONObject jo = new JSONObject();
-                try {
-                    jo.put(Names.TID, cursor.getInt(2));
-                    jo.put(Names.Date, cursor.getString(3));
-                    jo.put(Names.Category, cursor.getString(8));
-                    jo.put(Names.TName, cursor.getString(5));
-                    jo.put(Names.Amount, cursor.getInt(4));
-                    jo.put(Names.Price, cursor.getDouble(6));
-                    jo.put(Names.Currency, cursor.getString(9));
-                    jo.put(Names.Description, cursor.getString(10));
-                    jo.put(Names.isIncome, cursor.getString(7));
-                    jo.put(Names.PaymentType, cursor.getString(11));
-                    ja.put(jo);
-                } catch (/*JSONException |*/ Exception e) {
-                    System.out.println("Error in cursor\n" + e.getMessage());
-                }
+                jo.put(Names.TID, cursor.getInt(cursor.getColumnIndex(Names.TID)));
+                jo.put(Names.Date, cursor.getString(cursor.getColumnIndex(Names.Date)));
+                jo.put(Names.Category, cursor.getString(cursor.getColumnIndex(Names.Category)));
+                jo.put(Names.TName, cursor.getString(cursor.getColumnIndex(Names.TName)));
+                jo.put(Names.Amount, cursor.getInt(cursor.getColumnIndex(Names.Amount)));
+                jo.put(Names.Price, cursor.getDouble(cursor.getColumnIndex(Names.Price)));
+                jo.put(Names.Currency, cursor.getString(cursor.getColumnIndex(Names.Currency)));
+                jo.put(Names.Description, cursor.getString(cursor.getColumnIndex(Names.Description)));
+                jo.put(Names.isIncome, cursor.getString(cursor.getColumnIndex(Names.isIncome)));
+                jo.put(Names.PaymentType, cursor.getString(cursor.getColumnIndex(Names.PaymentType)));
+                ja.put(jo);
             }
-        cursor.close();
-        return ja;
+            cursor.close();
+            result.put("array", ja);
+            } catch (/*JSONException |*/ Exception e) {
+                System.out.println("Error in cursor\n" + e.getMessage());
+        }
+        return result;
     }
-
 }

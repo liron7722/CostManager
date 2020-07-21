@@ -12,47 +12,74 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RequestHandler {
     private CostManagerDB db;
+    private JSONObject response;
 
     public RequestHandler(Context context){
         this.db = new CostManagerDB(context);
     }
 
-    public JSONObject handleRequest(String request, int id) throws ProductsException{
+    public JSONObject getResponse() {
+        return response;
+    }
+
+    public void handleRequest(String request, int id) throws ProductsException{
         try{
-            return handleRequest(new JSONObject(request), id);
+            handleRequest(new JSONObject(request), id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return new JSONObject(); // TODO get proper response
+        this.response = new JSONObject(); // TODO get proper response
     }
 
-    private JSONObject handleRequest(JSONObject request, int id) {
+    public void handleRequest(JSONObject request, int id) {
         JSONObject response = new JSONObject();
         try {
             String cmd = request.getString(Names.Command);
             String table = request.getString(Names.Table);
             JSONObject requestData = new JSONObject(request.getString(Names.Data));
-            long result;
+            int result;
             switch (cmd) {
                 case "insert":
+                    System.out.println("Got insert Command");
                     switch (table) {
                         case Names.Profile_Table:
-                            result = db.insertToProfileTable(requestData.getString(Names.Name),
+                            System.out.println("Trying to insert into profile table");
+                            result = (int) db.insertToProfileTable(requestData.getString(Names.Name),
                                                             requestData.getString(Names.Password),
                                                             requestData.getString(Names.Email));
-                            response.put(Names.ResultMsg, "Register Success");
-                            response.put(Names.URL, "home");
-                            response.put(Names.Data, result);
+                            response.put(Names.newID, result);
+                            if (result > 0){
+                                response.put(Names.ResultMsg, "Register Success");
+                                response.put(Names.Data, "true");
+                            } else {
+                                response.put(Names.ResultMsg, "Register Failed");
+                                response.put(Names.Data, "false");
+                            }
                             break;
                         case Names.Transactions_Table:
-                            db.insertToTransactionTable(id,
+
+
+                            System.out.println("Trying to insert into Transactions Table");
+                            if (requestData.getBoolean(Names.isRepeat))
+                                for (int i = 1; i <= requestData.getInt(Names.Repeat); i++)
+                                    db.insertToTransactionTable(id,
+                                            requestData.getString(Names.Date),
+                                            requestData.getInt(Names.Amount),
+                                            requestData.getString(Names.TName) + " - " + i,
+                                            requestData.getDouble(Names.Price),
+                                            requestData.getBoolean(Names.isIncome),
+                                            requestData.getString(Names.Category),
+                                            requestData.getString(Names.Currency),
+                                            requestData.getString(Names.Description),
+                                            requestData.getString(Names.PaymentType));
+                            else
+                                db.insertToTransactionTable(id,
                                     requestData.getString(Names.Date),
                                     requestData.getInt(Names.Amount),
                                     requestData.getString(Names.TName),
@@ -63,33 +90,44 @@ public class RequestHandler {
                                     requestData.getString(Names.Description),
                                     requestData.getString(Names.PaymentType));
                             response.put(Names.ResultMsg, "Success");
-                            response.put(Names.URL, "home");
-                            response.put(Names.Data, new JSONObject("{true}"));
+                            response.put(Names.Data, "true");
                             break;
                     } break;
 
                 case "get":
+                    System.out.println("Got get Command");
                     Cursor cursor;
-                    response.put(Names.ResultMsg, "#");
                     switch (table) {
                         case Names.Profile_Table:
+                            System.out.println("Trying to get info from profile Table");
                             cursor = db.query(table,
                                     null,//new String[]{requestData.get("columns").toString()},
                                     requestData.getString("whereClause"),
                                     splitStrings(requestData.get("whereArgs").toString()));
-                            response.put(Names.newID, db.getDataFromProfileTable(cursor));
+                            result = db.getDataFromProfileTable(cursor);
+                            response.put(Names.newID, result);
+                            if (result > 0){
+                                response.put(Names.ResultMsg, "Logged In");
+                                response.put(Names.Data, "true");
+                            } else {
+                                response.put(Names.ResultMsg, "Logging Failed");
+                                response.put(Names.Data, "false");
+                            }
                             break;
 
                         case Names.Transactions_Table:
+                            System.out.println("Trying to get info from Transactions Table");
                             cursor = db.query(table,
                                     null,
                                     requestData.getString("whereClause"),
                                     new String[]{Integer.toString(id)});
-                            response.put(Names.Data, db.getDataFromTransactionsTable(cursor));
+                            JSONObject res = db.getDataFromTransactionsTable(cursor);
+                            response.put(Names.Data, res.toString());
                             break;
                     }break;
 
                 case "update":
+                    System.out.println("Got update Command");
                     result = db.update(table, (ContentValues) requestData.get("values"), requestData.getString("whereClause"), (String[]) requestData.get("whereArgs"));
                     response.put(Names.ResultMsg, "Update Success");
                     response.put(Names.URL, "home");
@@ -97,21 +135,17 @@ public class RequestHandler {
                     break;
 
                 case "delete":
-                    result = db.delete(table, requestData.getString("whereClause"), (String[]) requestData.get("whereArgs"));
+                    System.out.println("Got delete Command");
+                    db.delete(table, requestData.getString("whereClause"), (String[]) requestData.get("whereArgs"));
                     response.put(Names.ResultMsg, "Delete Success");
                     break;
             }
         }catch (JSONException e){
             response = couldNotResponse();
         }
-        return response;
-    }
-
-        private void setResponse(JSONObject response, long result) throws JSONException {
-        boolean success = result > 0;
-        response.put(Names.ResultMsg, "Success");
-        response.put(Names.URL, "Data");
-        response.put(Names.Data, result);
+        System.out.println("Printing out going response");
+        System.out.println(response.toString());
+        this.response =  response;
     }
 
     private JSONObject couldNotResponse(){
@@ -127,7 +161,7 @@ public class RequestHandler {
     }
 
     private String[] splitStrings(String toSplit){
-        List<String> allMatches = new ArrayList<String>();
+        List<String> allMatches = new ArrayList<>();
         Matcher m = Pattern.compile("([^\\W_]+[^\\s,]*)")
                 .matcher(toSplit);
         while (m.find()) {
@@ -136,4 +170,3 @@ public class RequestHandler {
         return allMatches.toArray(new String[]{});
     }
 }
-

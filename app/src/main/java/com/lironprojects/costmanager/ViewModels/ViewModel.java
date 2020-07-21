@@ -1,18 +1,20 @@
 package com.lironprojects.costmanager.ViewModels;
 
-import android.content.SharedPreferences;
 import android.webkit.WebView;
-import android.widget.Toast;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.lironprojects.costmanager.DB.Names;
+import com.lironprojects.costmanager.Models.Message;
 import com.lironprojects.costmanager.Models.RequestHandler;
 import com.lironprojects.costmanager.Models.ProductsException;
 
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONException;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ViewModel {
     private static final String uID = "id";
@@ -20,20 +22,21 @@ public class ViewModel {
     private static final String iC = "IncomeColor";
     private static final String eC = "ExpensesColor";
 
-    private static final String loginURL = "file:///android_asset/templates/login.html";
+    private static final String loginURL = "file:///android_asset/templates/welcome.html";
     private static final String homeURL = "file:///android_asset/templates/home.html";
 
     private WebView view;
-    private Toast toast;
+    private Context context;
     private SharedPreferences sp;
     private RequestHandler handler;
-    ExecutorService service = Executors.newFixedThreadPool(4);
+    private ExecutorService service = Executors.newFixedThreadPool(4);
 
     public void setView(WebView v){
         this.view = v;
+        this.view.loadUrl(homeURL);
     }
-    public void setToast(Toast t){
-        this.toast = t;
+    public void setContext(Context c){
+        this.context = c;
     }
     public void setSP(SharedPreferences sp){
         this.sp = sp;
@@ -42,26 +45,26 @@ public class ViewModel {
         this.handler = model;
     }
 
-    public void Toast(String message) {
-        if (!message.equals("#")){
-            this.toast.setText(message);
-            this.toast.show();
-        }
+    @android.webkit.JavascriptInterface
+    public void previous(){
+        this.view.goBack();
     }
 
     @android.webkit.JavascriptInterface
-    public void loadStartPage(){
-        if (Integer.parseInt(getSettings(uID)) != -1)
-            this.view.loadUrl(homeURL);
-        else
-            this.view.loadUrl(loginURL);
+    public boolean loginStatus(){
+        return sp.getInt(uID, -1) > 0;
     }
 
     @android.webkit.JavascriptInterface
     public void logOut(){
         this.sp.edit().putInt(uID,-1).apply();
-        loadStartPage();
-        Toast("logged out successfully");
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                view.evaluateJavascript("LoginStatus('" + loginURL + "')", null);
+            }});
+
+        Message.message(this.context,"logged out successfully");
     }
 
     @android.webkit.JavascriptInterface
@@ -100,58 +103,58 @@ public class ViewModel {
         return result;
     }
 
-
     @android.webkit.JavascriptInterface
-    public void Request(final String request) {
-        final String[] myURL = {"", ""};
+    public void Request(final String request) throws JSONException, InterruptedException {
+        final String data;
         this.service.submit(new Runnable() {
             @Override
             public void run() {
                 try{
+                    System.out.println(request);
                     int id = Integer.parseInt(getSettings(uID));
-                    JSONObject res = handler.handleRequest(request, id);
-
-                    // make toast
-                    Toast(res.getString(Names.ResultMsg));
-
-                    // new login
-                    if (res.has(Names.newID)){
-                        sp.edit().putInt(uID,res.getInt(Names.newID)).apply();
-                    }
-
-                    // change url if needed
-                    if (res.has(Names.URL)) {
-                        myURL[0] = res.getString(Names.URL);
-                    }
-
-                    // call js function if needed
-                    if (res.has(Names.Data))
-                        myURL[1] = "handleResponse(" + res.getString(Names.Data) + ")";
-
-
-                }catch (ProductsException | JSONException e){
+                    handler.handleRequest(request, id);
+                }catch (ProductsException e){
                     //TODO catch
-                    Toast("Error was made");
+                    System.out.println("Error at received response");
                 }
             }
         });
-        // change url if needed
-        if (myURL[0].length() > 0){
-            if(myURL[0].equals("home"))
-                loadStartPage();
-            else if(myURL[0].equals("back"))
-                view.goBack();
+
+        //TimeUnit.MILLISECONDS.sleep(2000);  // Give time to handle the request
+
+        JSONObject response = handler.getResponse();
+        while (response == null)
+            response = handler.getResponse();
+
+        // new login
+        if (response.has(Names.newID)){
+            System.out.println("Got new ID: " + response.getInt(Names.newID));
+            sp.edit().putInt(uID, response.getInt(Names.newID)).apply();
         }
-        if (myURL[1].length() > 0){
-            view.evaluateJavascript(myURL[1], null);
+
+        // make toast
+        if (response.has(Names.ResultMsg))
+            Message.message(this.context, response.getString(Names.ResultMsg));
+
+        // requested data
+        if (response.has(Names.Data)) {
+            System.out.println("Got data key in json");
+            data = response.getString(Names.Data);
+
+            // Sending data
+            System.out.println("sending data: " + data);
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    view.evaluateJavascript("handleResponse('" + data + "')",
+                            null);
+                }
+            });
         }
     }
-
-
-
-
+/*
     @android.webkit.JavascriptInterface
-    public void test() throws JSONException {
+    public void addTransactionTest() throws JSONException {
         final JSONObject req = new JSONObject();
         JSONObject data = new JSONObject();
 
@@ -176,17 +179,32 @@ public class ViewModel {
             @Override
             public void run() {
                 try{
-                    JSONObject res = handler.handleRequest(req.toString(), 1);
-                    System.out.println(res.getString("data"));
-                    Toast(res.getString("data"));
+                    String res = handler.handleRequest(req.toString(), 1);
+                    System.out.println(new JSONObject(res).getString("data"));
                 }catch (ProductsException | JSONException e){
                     //TODO catch
                 }
             }
         });
-        /*MyAsyncTask async = new MyAsyncTask(this.handler, this.view.getContext());
-        async.execute(req.toString());
-        String s = this.handler.getData().getString("data");
-        Toast(s);*/
     }
+
+    @android.webkit.JavascriptInterface
+    public void loginTest(){
+        this.service.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    String info = "{'columns': 'id', 'whereClause': 'Email = ? AND Password = ?'," +
+                            "'whereArgs': 'test@gmail.com,Test1234'}";
+                    String req = "{'cmd': 'get', 'table': 'Profile', 'data':'" + info +"'}";
+
+                    String x = handler.handleRequest(req, 1);
+                    System.out.println(x);
+                } catch (ProductsException e) {
+                    e.printStackTrace();
+                }
+            }});
+    }
+*/
 }

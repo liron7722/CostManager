@@ -28,9 +28,8 @@ public class MainActivity extends AppCompatActivity {
         ViewModel vm = new ViewModel();
         vm.setModel(new RequestHandler(this));
         vm.setView(this.webView);
-        vm.setToast(Toast.makeText(this, "", Toast.LENGTH_SHORT));
+        vm.setContext(this.getApplicationContext());
         vm.setSP(getSharedPreferences(localSP , Context.MODE_PRIVATE));
-        vm.loadStartPage();
 
         this.webView.addJavascriptInterface(vm, "vm");
         setContentView(this.webView);

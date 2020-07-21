@@ -1,3 +1,36 @@
+function addTransaction() {
+    let id = parseInt(window.vm.getSettings("id"));
+    let name = document.getElementById("name").value;
+    let category = document.getElementById("category").value;
+    let isIncome = document.getElementById("isincome").value;
+    let date = document.getElementById("date").value;
+    let amount = document.getElementById("amount").value;
+    let price = document.getElementById("price").value;
+    let currency = document.getElementById("currency").value;
+    let paymentType = document.getElementById("paymenttype").value;
+    let description = document.getElementById("description").value;
+    let isRepeat = document.getElementById("isrepeat").value;
+    let repeat = document.getElementById("repeat").value;
+
+    isIncome = isIncome === "on";
+    isRepeat = isRepeat === "on";
+
+    let info = {"id": id, "TName": name, "Category": category, "isIncome": isIncome,
+                "Date": date, "Amount": amount, "Price": price, "isRepeat": isRepeat, "Repeat": repeat,
+                "Currency": currency, "PaymentType": paymentType, "Description": description};
+    let stringRequest = JSON.stringify({ "cmd": 'insert', "table": 'Transactions', "data": info});
+    window.vm.Request(stringRequest);
+}
+
+function handleResponse(response){
+    if (response){
+        location.href='home.html';
+        console.log('Added successfully');
+    }else
+        console.log('Something went wrong, please try again');
+}
+
+
 $("#hidden").hide();
 $("#showmore").hide();
 
@@ -13,36 +46,3 @@ $("#isrepeat").click(function() {
         $("#hidden").hide();
     }
 });
-
-
-
-function addTransaction() {
-    var id = parseInt(window.vm.getSettings("id"));
-    var name = document.getElementById("name").value;
-    var category = document.getElementById("category").value;
-    var isIncome = document.getElementById("isincome").value;
-    var date = document.getElementById("date").value;
-    var amount = document.getElementById("amount").value;
-    var price = document.getElementById("price").value;
-    var currency = document.getElementById("currency").value;
-    var paymentType = document.getElementById("paymenttype").value;
-    var description = document.getElementById("description").value;
-    var isRepeat = document.getElementById("isrepeat").value;
-    var repeat = document.getElementById("repeat").value;
-
-    var info = {"id": id, "TName": name, "Category": category, "isIncome": isIncome,
-                "Date": date, "Amount": amount, "Price": price,
-                "Currency": currency, "PaymentType": paymentType, "Description": description};
-    return [info, isRepeat, repeat];
-}
-
-function handleResponse(response){
-    if (response.result) {
-        window.vm.updateSettings("id" ,parseInt(response.data));
-        window.vm.loadStartPage();
-        window.vm.Toast("Added successfully");
-    }
-    else {
-        window.vm.Toast('Something went wrong, please try again');
-    }
-}

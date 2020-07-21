@@ -25,6 +25,8 @@ public class Names {
     public static final String Currency = "Currency";
     public static final String Description = "Description";
     public static final String PaymentType = "PaymentType";
+    public static final String isRepeat = "isRepeat";
+    public static final String Repeat = "Repeat";
     protected static final String[] Transactions_cols = {UID, TID, Amount, TName, Price,
                                             isIncome, Category, Currency, Description, PaymentType};
 

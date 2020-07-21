@@ -42,8 +42,8 @@ public class SQLiteBasic extends SQLiteOpenHelper {
     private void createProfileTable(SQLiteDatabase db){
         String sql = "CREATE TABLE " + Names.Profile_Table + " ("
                 + Names.UID + " integer PRIMARY KEY AUTOINCREMENT"
-                + ", " + Names.Password + " text NOT NULL"
                 + ", " + Names.Name + " text NOT NULL"
+                + ", " + Names.Password + " text NOT NULL"
                 + ", " + Names.Email + " text NOT NULL Unique"
                 + ");";
         db.execSQL(sql);

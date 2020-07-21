@@ -1,28 +1,31 @@
 function getData(){
-    var info = JSON.stringify({"columns": null,
+    let info = JSON.stringify({"columns": null,
                                "whereClause": "id = ?",
                                "whereArgs": []});
-    var stringRequest = JSON.stringify({ "cmd": "get", "table": "Transactions", "data": info });
+    let stringRequest = JSON.stringify({ "cmd": "get", "table": "Transactions", "data": info });
     window.vm.Request(stringRequest);
 }
 
-function handleResponse(data) {
-    var table = document.getElementById("Table");
-    for(var index = 1; index <= data.length; index++){
-        AddTableRow(data[index], index, table);
+function handleResponse(input) {
+    let data = JSON.parse(input)["array"];
+    console.log(data);
+    let addedRows = 2;
+    let table = document.getElementById("Table");
+    for(let index = addedRows; index <= data.length + addedRows; index++){
+        AddTableRow(data[index - addedRows], index, table);
     }        
 }
 
 function AddTableRow(data, index, table){
-    var col = 0;
-    var row = table.insertRow(index);
-    for(value in data){
+    let col = 0;
+    let row = table.insertRow(index);
+    for(let value in data){
         AddTableCell(data[value], col++, row);
     }        
 }
 
 function AddTableCell(value, index, row){
-    var cell = row.insertCell(index);
+    let cell = row.insertCell(index);
     cell.innerHTML = value;
 }
 
@@ -30,9 +33,29 @@ function DeleteTableRow(index) {
   document.getElementById("Table").deleteRow(index);
 }
 
-//getData();
+getData();
+
+//$(#Transactions).hide().trigger("updatelayout");
+
+/*$(document).ready(function() {
+    $('[data-toggle="toggle"]').change(function(){
+        $(this).parents().next('.hide').toggle();
+    });
+});
+
+
+$(document).ready(function(){
+  $("#filterInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#Table tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+*/
+
 //Delete all below this line after fixing app call
-var data2 = [
+/*var data2 = [
     {
         "UserID": 1,
         "UserName": "rooter",
@@ -62,4 +85,4 @@ var data2 = [
         "Email": "nera@gmail.com"
     }
 ];
-handleResponse(data2); 
+handleResponse(data2); */

@@ -1,12 +1,15 @@
-function sendRequest(cmd, tableName, info) {
-    var stringRequest = JSON.stringify({ "cmd": cmd, "table": tableName, "data": info });
-    var unParseResponse = window.vm.Request(stringRequest);
-    var response = JSON.parse(unParseResponse);
-    return response
+function LoginStatus(){
+	if (window.vm.loginStatus()){
+		console.log('logged in');
+		// TODO show profile, logout
+		// TODO hide home, Transactions, register, login
+	}
+	else {
+		console.log('Not logged in');
+		location.href='login.html';
+		// TODO show register, login
+		// TODO hide profile, logout
+	}
 }
 
-function logOut(){
-    window.vm.updateSettings("id" ,-1);
-    window.vm.loadStartPage();
-    window.vm.Toast("logged out successfully");
-}
+LoginStatus();
