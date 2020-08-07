@@ -1,30 +1,52 @@
-function rgbaRandom(){
-    var r = Math.floor(Math.random() * 255);
-    var g = Math.floor(Math.random() * 255);
-    var b = Math.floor(Math.random() * 255);
-    return 'rgba(' + r.toString() + ', ' + g.toString() + ', ' + b.toString() + ',';
+function getData(){
+    let info = JSON.stringify({"columns": null,
+        "whereClause": "id = ?",
+        "whereArgs": []});
+    let stringRequest = JSON.stringify({ "cmd": "get", "table": "Transactions", "data": info });
+    window.vm.Request(stringRequest);
 }
 
-function updateChart(data) {
-    var lb = []
-    var dataNum = []
-    var bgC = []
-    var bC = []
-    var stringColor;
+function handleResponse(input) {
+    console.log('input received');
+    console.log(input);
+    window.data = JSON.parse(input)["array"];
+    showCharts(window.data);
+}
+
+function rgbaRandom(){
+    let r = Math.floor(Math.random() * 255);
+    let g = Math.floor(Math.random() * 255);
+    let b = Math.floor(Math.random() * 255);
+    return 'rgba(' + r.toString() + ', ' + g.toString() + ', ' + b.toString() + ', 1';
+}
+
+function transactionsChart(data) {
+    let lb = [];
+    let dataNum = [];
+    let bgC = [];
+    let bC = [];
+    let legends = [];
+    let rgbaGreen = 'rgba(41, 241, 195, 1)';
+    let rgbaRed = 'rgba(246, 36, 89, 1)';
+    let stringColor;
     data.forEach(function(ta){
-        lb.push(ta.Category)
-        dataNum.push(ta.Price)
-        stringColor = rgbaRandom();
-        bgC.push(stringColor + " 0.2)");
-        bC.push(stringColor + " 1)");
+        lb.push(ta.TName);
+        dataNum.push(ta.Price);
+        if (ta.isIncome === "1")
+            stringColor = rgbaGreen;
+        else
+            stringColor = rgbaRed;
+        bgC.push(stringColor);
+        bC.push(stringColor);
     });
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+    legends.push({'Inc': rgbaGreen, 'Exp': rgbaRed});
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: lb,
             datasets: [{
-                label: 'Price',
+                label: legends,
                 data: dataNum,
                 backgroundColor: bgC,
                 borderColor: bC,
@@ -43,4 +65,10 @@ function updateChart(data) {
     });
 }
 
-updateChart();
+function showCharts(data) {
+    transactionsChart(data);
+}
+
+getData();
+
+

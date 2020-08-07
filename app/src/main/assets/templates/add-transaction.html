@@ -4,27 +4,57 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <!-- CSS -->
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-    <link rel="stylesheet" type="text/css" href="../static/main.css">
+    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
+    <link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="../static/jquery.mobile-1.4.5.min.css" />
     <link rel="stylesheet" type="text/css" href="../static/form.css">
-    <title>Cost Manager - Add Transaction</title>
+
+    <title>Cost Manager</title>
 </head>
 
 <body>
 
     <main role="main" class="container">
+
+        <div data-role="header" style="overflow:hidden">
+            <h1>Cost Manager</h1>
+                <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+        </div><!-- /header -->
+
+            <div data-role="navbar" data-grid="c">
+                <ul>
+                <li><button class='navbarButton' id="home" value="home">Home</button></li>
+                <li><button class="navbarButton" id="report" value="balance">Balance Report</button></li>
+                <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
+                </ul>
+            </div><!-- /navbar -->
+
+        <div data-role="panel" id="panel" data-display="push" data-position-fixed="true">
+            <div>
+                <button class="panelButton" id="about" value="about">About</button>
+                <button class="panelButton" id="profile" value="profile">Profile</button>
+                <button class="panelButton" id="settings" value="settings">Settings</button>
+            </div>
+
+            <div>
+                <button class="panelButton" id="logout" value="welcome">Log Out</button>
+                <a href="#" data-rel="close">Close panel</a>
+            </div>
+        </div><!-- /panel -->
+
         <div class="content-section">
-            <form name="registertionForm" onsubmit="addTransaction()" method="post">
+            <form name="TransactionForm" onsubmit="addTransaction()" method="post">
                 <div class="container">
                     <h1>Add Transaction</h1>
                     <p>Please fill this form to add a Transaction.</p>
                     <hr>
-                    <label for="isincome"><b>Income?</b></label>
-                    <input type="checkbox" name="isincome" id="isincome">
+                    <label>
+                        <input type="checkbox" id="isincome" name="isincome">Income?
+                    </label>
                     <label for="name"><b>Name</b></label>
-                    <input type="text" placeholder="Enter Transaction Name" name="name" id="name" required>
+                    <input type="text" data-clear-btn="true" placeholder="Enter Transaction Name" name="name" id="name" required>
                     <label for="category"><b>Category</b></label><br>
                     <select name="category" id="category" required>
                         <optgroup label="General">
@@ -51,11 +81,13 @@
                     <label for="amount"><b>Amount</b></label>
                     <input type="number" placeholder="Enter Amount" name="amount" id="amount" required>
                     <label for="price"><b>Price</b></label>
-                    <input type="number" placeholder="Enter Price" step=0.01 name="price" id="price" required>
-                    <button class="btn btn-outline-info" id="moreinfo">Show More</button><br><br>
-                    <div id="showmore">
+                    <input type="number" placeholder="Enter Price" step=0.01 name="price" id="price" required><br>
+                    <label>
+                        <input type="checkbox" id="moreInfo" name="moreInfo">Show More
+                    </label><br><br>
+                    <div id="showInfo" hidden="hidden">
                         <label for="description"><b>Description</b></label>
-                        <input type="text" placeholder="Enter Description" step=0.01 name="description" id="description">
+                        <textarea data-clear-btn="true" name="description" id="description" placeholder="Enter Description"></textarea>
                         <label for="currency"><b>Currency</b></label><br>
                         <select name="currency" id="currency" required>
                             <option value="USD">USD</option>
@@ -66,12 +98,10 @@
                             <option value="Cash">Cash</option>
                             <option value="Credit">Credit</option>
                         </select><br><br>
-                        <label for="isrepeat"><b>Repeat?</b></label>
-                        <input type="checkbox" name="isrepeat" id="isrepeat">
-                        <div id="hidden">
-                            <label for="repeat">Repeats (between 1 and 60):</label>
-                            <input type="range" id="repeat" name="repeat" value="0" step="1" min="0" max="60">
-                        </div>
+                        <label>
+                            <input type="checkbox" id="isrepeat" name="isrepeat">Repeated Transaction? (between 1 and 60)
+                        </label>
+                        <label for="repeat"></label><input class="ui-state-disabled" type="number" placeholder="Enter Repeats number" name="repeat" id="repeat" value="0" step="1" min="0" max="60">
                     </div>
                     <div class="form-group">
                         <button type="submit" name="submit" value="Submit">Confirm</button>
@@ -82,8 +112,9 @@
     </main>
 
     <!-- JQuery -->
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="../JS/jquery-1.11.1.min.js"></script>
+    <script src="../JS/jquery.mobile-1.4.5.min.js"></script>
+    <!-- JS -->
     <script src="../JS/connect.js"></script>
     <script src="../JS/addTransaction.js"></script>
 

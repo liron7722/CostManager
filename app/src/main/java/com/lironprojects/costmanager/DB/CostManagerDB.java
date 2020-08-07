@@ -54,8 +54,8 @@ public class CostManagerDB{
         return this.DBHelper.getWritableDatabase().query(
                 TABLE_NAME,     // The table to query
                 columns,  // The array of columns to return (pass null to get all)
-                null,      // The columns for the WHERE clause
-                null,//whereArgs,  // The values for the WHERE clause
+                whereClause,      // The columns for the WHERE clause
+                whereArgs,//whereArgs,  // The values for the WHERE clause
                 null,  // don't group the rows
                 null,   // don't filter by row groups
                 null   // The sort order
@@ -75,7 +75,21 @@ public class CostManagerDB{
     }
 
     public int getDataFromProfileTable(Cursor cursor){
-        return cursor.getInt(cursor.getColumnIndex(Names.UID));
+        System.out.println("inside db.getDataFromProfileTable");
+        try{
+            int res = -1;
+            while (cursor.moveToNext()) {
+                res = cursor.getInt(cursor.getColumnIndex(Names.UID));
+                System.out.println("res: ");
+                System.out.println(res);
+            }
+            return res;
+        } catch (Exception e){
+            System.out.println("got error:");
+            System.out.println(e.getMessage());
+            System.out.println(e.fillInStackTrace().toString());
+            return -1;
+        }
     }
 
     public JSONObject getDataFromTransactionsTable(Cursor cursor) {
@@ -84,16 +98,16 @@ public class CostManagerDB{
         try {
             while (cursor.moveToNext()){
                 JSONObject jo = new JSONObject();
-                jo.put(Names.TID, cursor.getInt(cursor.getColumnIndex(Names.TID)));
                 jo.put(Names.Date, cursor.getString(cursor.getColumnIndex(Names.Date)));
-                jo.put(Names.Category, cursor.getString(cursor.getColumnIndex(Names.Category)));
                 jo.put(Names.TName, cursor.getString(cursor.getColumnIndex(Names.TName)));
+                jo.put(Names.Category, cursor.getString(cursor.getColumnIndex(Names.Category)));
                 jo.put(Names.Amount, cursor.getInt(cursor.getColumnIndex(Names.Amount)));
                 jo.put(Names.Price, cursor.getDouble(cursor.getColumnIndex(Names.Price)));
                 jo.put(Names.Currency, cursor.getString(cursor.getColumnIndex(Names.Currency)));
                 jo.put(Names.Description, cursor.getString(cursor.getColumnIndex(Names.Description)));
                 jo.put(Names.isIncome, cursor.getString(cursor.getColumnIndex(Names.isIncome)));
                 jo.put(Names.PaymentType, cursor.getString(cursor.getColumnIndex(Names.PaymentType)));
+                jo.put(Names.TID, cursor.getInt(cursor.getColumnIndex(Names.TID)));
                 ja.put(jo);
             }
             cursor.close();

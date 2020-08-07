@@ -9,8 +9,11 @@ function validatePassword() {
     }
 }
 
-password.onchange = validatePassword;
-confirm_password.onkeyup = validatePassword;
+//password.onchange = validatePassword;
+//confirm_password.onkeyup = validatePassword;
+
+$('#password').change(function() { validatePassword(); });
+$('#confirm_password').on('change', function() { validatePassword(); });
 
 function register() {
     let name = document.getElementById("name").value;

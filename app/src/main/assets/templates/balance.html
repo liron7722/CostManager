@@ -4,57 +4,53 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <!-- CSS -->
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-    <link rel="stylesheet" type="text/css" href="../static/main.css">
-    <link rel="stylesheet" type="text/css" href="../static/balance.css">
-    <title>Cost Manager - Balance</title>
+    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
+    <link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="../static/jquery.mobile-1.4.5.min.css" />
+
+    <title>Cost Manager</title>
 </head>
 
 <body>
     <main role="main" class="container">
-        <canvas id="myChart" width="100px" height="75px"></canvas>
-        <div>
-            <input id="filterInput" type="text" placeholder="Search..">
-            <table id="Table">
-                <thead>
-                </thead>
-                <tbody>
-                <tbody class="labels">
-                    <tr>
-                        <td colspan="10">
-                            <label for="Transactions">Transactions</label>
-                            <input type="checkbox" name="Transactions" id="Transactions" data-toggle="toggle">
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody class="hide">
-                    <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>Price</th>
-                        <th>Currency</th>
-                        <th>Description</th>
-                        <th>Income</th>
-                        <th>Payment Type</th>
-                    </tr>
-                </tbody>
-                </table>
-        </div>
-    </main>
 
+        <div data-role="header" style="overflow:hidden">
+            <h1>Cost Manager</h1>
+                <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+                <div data-role="navbar">
+                    <ul>
+                    <li><button class='navbarButton' id="home" value="home">Home</button></li>
+                    <li><button class="ui-btn-active" id="report" value="balance">Balance Report</button></li>
+                    <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
+                    </ul>
+                </div><!-- /navbar -->
+        </div><!-- /header -->
+
+        <div data-role="panel" id="panel" data-display="push" data-position-fixed="true">
+            <div>
+                <button class="panelButton" id="about" value="about">About</button>
+                <button class="panelButton" id="profile" value="profile">Profile</button>
+                <button class="panelButton" id="settings" value="settings">Settings</button>
+            </div>
+
+            <div>
+                <button class="panelButton" id="logout" value="welcome">Log Out</button>
+                <a href="#main" data-rel="close">Close panel</a>
+            </div>
+        </div><!-- /panel -->
+
+        <canvas id="myChart" width="100px" height="75px"></canvas>
+
+    </main>
     <!-- JQuery -->
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script src="../JS/transactions.js"></script>
+    <script src="../JS/jquery-1.11.1.min.js"></script>
+    <script src="../JS/jquery.mobile-1.4.5.min.js"></script>
+    <!-- JS -->
+    <script src="../JS/chart.js@2.8.0.js"></script>
+    <script src="../JS/connect.js"></script>
     <script src="../JS/balance.js"></script>
 
-    <script> updateChart(data); </script>
 </body>
-
 </html>

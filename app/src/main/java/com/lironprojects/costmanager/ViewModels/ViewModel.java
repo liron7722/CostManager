@@ -110,6 +110,7 @@ public class ViewModel {
             @Override
             public void run() {
                 try{
+                    System.out.println("inside service.submit");
                     System.out.println(request);
                     int id = Integer.parseInt(getSettings(uID));
                     handler.handleRequest(request, id);
@@ -119,12 +120,14 @@ public class ViewModel {
                 }
             }
         });
-
-        //TimeUnit.MILLISECONDS.sleep(2000);  // Give time to handle the request
+        System.out.println("after service.submit");
+        //TimeUnit.MILLISECONDS.sleep(1000);  // Give time to handle the request
 
         JSONObject response = handler.getResponse();
         while (response == null)
             response = handler.getResponse();
+        System.out.println(response);
+        System.out.println("after handler.getResponse");
 
         // new login
         if (response.has(Names.newID)){
@@ -151,23 +154,28 @@ public class ViewModel {
                 }
             });
         }
+        System.out.println("befor handler.resetResponse");
+        handler.resetResponse();
+        System.out.println("after handler.resetResponse");
     }
 /*
     @android.webkit.JavascriptInterface
     public void addTransactionTest() throws JSONException {
         final JSONObject req = new JSONObject();
-        JSONObject data = new JSONObject();
+        final JSONObject data = new JSONObject();
 
-        data.put(Names.UID, 1);
-        data.put(Names.Date, "30/05/2020");
+        //data.put(Names.UID, 4);
+        data.put(Names.Date, "2020-07-24");
         data.put(Names.Amount, 1);
         data.put(Names.TName, "test1");
-        data.put(Names.Price, 50.20);
+        data.put(Names.Price, 50);
         data.put(Names.isIncome, false);
         data.put(Names.Category, "Category test");
         data.put(Names.Currency, "NIS");
-        data.put(Names.Description, "this is my desc");
-        data.put(Names.PaymentType, "cash");
+        data.put(Names.Description, "this is my Description");
+        data.put(Names.PaymentType, "Cash");
+        data.put(Names.isRepeat, false);
+        data.put(Names.Repeat, 0);
 
         req.put("cmd", "insert");
         req.put("table", Names.Transactions_Table);
@@ -179,10 +187,22 @@ public class ViewModel {
             @Override
             public void run() {
                 try{
-                    String res = handler.handleRequest(req.toString(), 1);
-                    System.out.println(new JSONObject(res).getString("data"));
-                }catch (ProductsException | JSONException e){
+                    handler.handleRequest(req.toString(), 4);
+                }catch (ProductsException e){
                     //TODO catch
+                }
+            }
+        });
+        final JSONObject response = handler.getResponse();
+        System.out.println("sending data: " + data);
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    view.evaluateJavascript("handleResponse('" + response.getString(Names.Data) + "')",
+                            null);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });

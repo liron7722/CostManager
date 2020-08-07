@@ -4,16 +4,28 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <!-- CSS -->
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-    <link rel="stylesheet" type="text/css" href="../static/main.css">
+    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
+    <link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="../static/jquery.mobile-1.4.5.min.css" />
     <link rel="stylesheet" type="text/css" href="../static/form.css">
-    <title>Cost Manager - Login</title>
+
+    <title>Cost Manager</title>
 </head>
 
 <body>
     <main role="main" class="container">
+        <div data-role="header" style="overflow:hidden">
+            <h1>Cost Manager</h1>
+                <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+        </div><!-- /header -->
+
+        <div data-role="panel" id="panel" data-display="push" data-position-fixed="true">
+            <button class="panelButton" id="register" value="register">Register</button>
+            <a href="#" data-rel="close">Close panel</a>
+        </div><!-- /panel -->
+
         <div class="content-section">
             <form name="loginForm" onsubmit="attemptLogin()" method="post">
                 <div class="container">
@@ -22,11 +34,11 @@
                     <hr>
                     <label for="email"><b>Email</b></label>
                     <br>
-                    <input type="email" placeholder="Enter Email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" title="Must contain valid email address!" required>
+                    <input type="email" data-clear-btn="true" placeholder="Enter Email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" title="Must contain valid email address!" required>
                     <br>
                     <label for="password"><b>Password</b></label>
                     <br>
-                    <input type="password" placeholder="Enter Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+                    <input type="password" data-clear-btn="true" placeholder="Enter Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
                     <hr>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit" name="submit" value="Submit">Sign In</button>
@@ -42,9 +54,12 @@
     </main>
 
     <!-- JQuery -->
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="../JS/jquery-1.11.1.min.js"></script>
+    <script src="../JS/jquery.mobile-1.4.5.min.js"></script>
+    <!-- JS -->
+    <script src="../JS/connect.js"></script>
     <script src="../JS/login.js"></script>
+
 </body>
 
 </html>

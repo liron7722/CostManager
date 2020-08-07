@@ -1,31 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <!-- CSS -->
     <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
     <link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" href="../static/jquery.mobile-1.4.5.min.css" />
-    <script src="../JS/jquery-1.11.1.min.js"></script>
-    <script src="../JS/jquery.mobile-1.4.5.min.js"></script>
 
     <title>Cost Manager</title>
 </head>
 
 <body>
-    <main role="main" class="d-flex align-items-center flex-column" id=main>
+    <main role="main" id=main>
+
+        <div data-role="header" style="overflow:hidden">
+            <h1>Cost Manager</h1>
+                <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+        </div><!-- /header -->
+
+        <div data-role="navbar" data-grid="d">
+            <ul>
+            <li><button class='ui-btn-active' id="home" value="home">Home</button></li>
+            <li><button class="navbarButton" id="report" value="balance">Balance Report</button></li>
+            <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
+            <li> </li>
+            </ul>
+        </div><!-- /navbar -->
+
+        <div data-role="panel" id="panel" data-display="push" data-position-fixed="true">
+            <div>
+            <button class="panelButton" id="about" value="about">About</button>
+            <button class="panelButton" id="profile" value="profile">Profile</button>
+            <button class="panelButton" id="settings" value="settings">Settings</button>
+            </div>
+
+            <div>
+            <button class="panelButton" id="logout" value="welcome">Log Out</button>
+            <a href="#main" data-rel="close">Close panel</a>
+            </div>
+        </div><!-- /panel -->
+
 
         <div class="p-2">
-            <button class="getBalance" id="report">Balance Report</button>
-        </div>
-        <div class="p-2">
-            <button class='Transaction' id="addTransaction">Add Transaction</button>
-        </div>
-        <div class="p-2">
-            <button class='Transaction' id="getTransaction">My Transactions</button>
+            <button class='Transaction' id="addTransaction" value="add-transaction">Add Transaction</button>
         </div>
         <div class="p-2">
             <button class="test" id="test" onclick="window.vm.test()">Test</button>
@@ -34,9 +54,11 @@
     </main>
 
     <!-- JQuery -->
-
-    <script src="../JS/home.js"></script>
+    <script src="../JS/jquery-1.11.1.min.js"></script>
+    <script src="../JS/jquery.mobile-1.4.5.min.js"></script>
+    <!-- JS -->
     <script src="../JS/connect.js"></script>
+    <script src="../JS/home.js"></script>
 </body>
 
 </html>

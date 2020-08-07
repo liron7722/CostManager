@@ -28,13 +28,18 @@ public class RequestHandler {
         return response;
     }
 
+    public void resetResponse(){
+        response = null;
+    }
+
     public void handleRequest(String request, int id) throws ProductsException{
         try{
             handleRequest(new JSONObject(request), id);
         } catch (JSONException e) {
             e.printStackTrace();
+            this.response = new JSONObject(); // TODO get proper response
         }
-        this.response = new JSONObject(); // TODO get proper response
+
     }
 
     public void handleRequest(JSONObject request, int id) {
@@ -63,10 +68,8 @@ public class RequestHandler {
                             }
                             break;
                         case Names.Transactions_Table:
-
-
                             System.out.println("Trying to insert into Transactions Table");
-                            if (requestData.getBoolean(Names.isRepeat))
+                            if (requestData.getBoolean(Names.isRepeat) && requestData.getInt(Names.Repeat) > 0)
                                 for (int i = 1; i <= requestData.getInt(Names.Repeat); i++)
                                     db.insertToTransactionTable(id,
                                             requestData.getString(Names.Date),
@@ -101,10 +104,11 @@ public class RequestHandler {
                         case Names.Profile_Table:
                             System.out.println("Trying to get info from profile Table");
                             cursor = db.query(table,
-                                    null,//new String[]{requestData.get("columns").toString()},
+                                    new String[]{requestData.get("columns").toString()},
                                     requestData.getString("whereClause"),
                                     splitStrings(requestData.get("whereArgs").toString()));
                             result = db.getDataFromProfileTable(cursor);
+                            System.out.println("after db.getDataFromProfileTable");
                             response.put(Names.newID, result);
                             if (result > 0){
                                 response.put(Names.ResultMsg, "Logged In");
@@ -141,6 +145,8 @@ public class RequestHandler {
                     break;
             }
         }catch (JSONException e){
+            System.out.println(e.toString());
+            System.out.println(e.getMessage());
             response = couldNotResponse();
         }
         System.out.println("Printing out going response");
@@ -153,7 +159,7 @@ public class RequestHandler {
         try {
             response.put(Names.ResultMsg, "Failed");
             response.put(Names.URL, "#");
-            response.put(Names.Data, "#"); // TODO Change
+            response.put(Names.Data, ""); // TODO Change
         }catch (JSONException e) {
             System.out.println("Could not create response Json");
         }
