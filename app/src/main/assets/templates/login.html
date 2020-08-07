@@ -6,11 +6,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <!-- CSS -->
-    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
     <link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" href="../static/jquery.mobile-1.4.5.min.css" />
     <link rel="stylesheet" type="text/css" href="../static/form.css">
-
+    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
+    <link rel="stylesheet" href="../themes/cost-Manager-utils.css" />
     <title>Cost Manager</title>
 </head>
 
@@ -18,15 +18,13 @@
     <main role="main" class="container">
         <div data-role="header" style="overflow:hidden">
             <h1>Cost Manager</h1>
-                <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+            <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
         </div><!-- /header -->
-
         <div data-role="panel" id="panel" data-display="push" data-position-fixed="true">
             <button class="panelButton" id="register" value="register">Register</button>
             <a href="#" data-rel="close">Close panel</a>
         </div><!-- /panel -->
-
-        <div class="content-section">
+        <div class="ui-content">
             <form name="loginForm" onsubmit="attemptLogin()" method="post">
                 <div class="container">
                     <h1>Login</h1>
@@ -41,7 +39,7 @@
                     <input type="password" data-clear-btn="true" placeholder="Enter Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
                     <hr>
                     <div class="form-group">
-                        <button class="btn btn-outline-info" type="submit" name="submit" value="Submit">Sign In</button>
+                        <button class="btn btn-outline-info confirm-button" type="submit" name="submit" value="Submit">Sign In</button>
                     </div>
                 </div>
             </form>
@@ -52,14 +50,12 @@
             </div>
         </div>
     </main>
-
     <!-- JQuery -->
     <script src="../JS/jquery-1.11.1.min.js"></script>
     <script src="../JS/jquery.mobile-1.4.5.min.js"></script>
     <!-- JS -->
     <script src="../JS/connect.js"></script>
     <script src="../JS/login.js"></script>
-
 </body>
 
 </html>

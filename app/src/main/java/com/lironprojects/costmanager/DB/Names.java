@@ -1,6 +1,8 @@
 package com.lironprojects.costmanager.DB;
 
 public class Names {
+    /* log Tag */
+    public static final String logTAG = "CostManager";
 
     /* Tables */
     public static final String Profile_Table = "Profile";

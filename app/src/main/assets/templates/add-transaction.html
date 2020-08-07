@@ -6,45 +6,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <!-- CSS -->
-    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
     <link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" href="../static/jquery.mobile-1.4.5.min.css" />
     <link rel="stylesheet" type="text/css" href="../static/form.css">
-
+    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
+    <link rel="stylesheet" href="../themes/cost-Manager-utils.css" />
     <title>Cost Manager</title>
 </head>
 
 <body>
-
     <main role="main" class="container">
-
         <div data-role="header" style="overflow:hidden">
             <h1>Cost Manager</h1>
-                <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+            <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+            <div data-role="navbar">
+                <ul>
+                    <li><button class='navbarButton' id="home" value="home">Home</button></li>
+                    <li><button class="navbarButton" id="report" value="balance">Balance Report</button></li>
+                    <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
+                </ul>
+            </div><!-- /navbar -->
         </div><!-- /header -->
-
-            <div data-role="navbar" data-grid="c">
-                <ul>
-                <li><button class='navbarButton' id="home" value="home">Home</button></li>
-                <li><button class="navbarButton" id="report" value="balance">Balance Report</button></li>
-                <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
-                </ul>
-            </div><!-- /navbar -->
-
         <div data-role="panel" id="panel" data-display="push" data-position-fixed="true">
             <div>
                 <button class="panelButton" id="about" value="about">About</button>
                 <button class="panelButton" id="profile" value="profile">Profile</button>
                 <button class="panelButton" id="settings" value="settings">Settings</button>
             </div>
-
             <div>
                 <button class="panelButton" id="logout" value="welcome">Log Out</button>
                 <a href="#" data-rel="close">Close panel</a>
             </div>
         </div><!-- /panel -->
-
-        <div class="content-section">
+        <div class="ui-content">
             <form name="TransactionForm" onsubmit="addTransaction()" method="post">
                 <div class="container">
                     <h1>Add Transaction</h1>
@@ -104,20 +98,18 @@
                         <label for="repeat"></label><input class="ui-state-disabled" type="number" placeholder="Enter Repeats number" name="repeat" id="repeat" value="0" step="1" min="0" max="60">
                     </div>
                     <div class="form-group">
-                        <button type="submit" name="submit" value="Submit">Confirm</button>
+                        <button type="submit" name="submit" value="Submit" class="confirm-button">Confirm</button>
                     </div>
                 </div>
             </form>
         </div>
     </main>
-
     <!-- JQuery -->
     <script src="../JS/jquery-1.11.1.min.js"></script>
     <script src="../JS/jquery.mobile-1.4.5.min.js"></script>
     <!-- JS -->
     <script src="../JS/connect.js"></script>
     <script src="../JS/addTransaction.js"></script>
-
 </body>
 
 </html>

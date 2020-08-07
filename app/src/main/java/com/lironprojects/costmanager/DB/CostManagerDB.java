@@ -3,8 +3,11 @@ package com.lironprojects.costmanager.DB;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+import android.util.Log;
 
-import androidx.annotation.NonNull;
+
+import com.lironprojects.costmanager.Models.CostManagerException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,19 +23,19 @@ public class CostManagerDB{
     }
 
     public long insertToProfileTable(String name, String password, String email) {
+        Log.i(Names.logTAG, "Inside insertToProfileTable function");
         ContentValues values = new ContentValues();
         values.put(Names.Name, name);
         values.put(Names.Password, password);
         values.put(Names.Email, email);
-        long id = this.DBHelper.getWritableDatabase().insert(Names.Profile_Table,
+        return this.DBHelper.getWritableDatabase().insert(Names.Profile_Table,
                                                             null, values);
-        //this.DBHelper.close();
-        return id;
     }
 
     public void insertToTransactionTable(int id, String date, int amount, String name, double price,
                                          boolean isIncome, String category, String currency,
                                          String description, String paymentType) {
+        Log.i(Names.logTAG, "Inside insertToTransactionTable function");
         ContentValues values = new ContentValues();
         values.put(Names.UID, id);
         values.put(Names.Date, date);
@@ -45,17 +48,16 @@ public class CostManagerDB{
         values.put(Names.Description, description);
         values.put(Names.PaymentType, paymentType);
         this.DBHelper.getWritableDatabase().insert(Names.Transactions_Table, null, values);
-        //this.DBHelper.close();
     }
 
     public Cursor query(String TABLE_NAME, String[] columns, String whereClause, String[] whereArgs){
-        System.out.println("query values:");
-        System.out.println("table: " + TABLE_NAME + ", columns: " + Arrays.toString(columns) + ", whereClause: " + whereClause + ", whereArgs: " + Arrays.toString(whereArgs));
+        Log.i(Names.logTAG, "Inside query function, query values: table: " + TABLE_NAME + ", columns: " +
+                Arrays.toString(columns) + ", whereClause: " + whereClause + ", whereArgs: " + Arrays.toString(whereArgs));
         return this.DBHelper.getWritableDatabase().query(
                 TABLE_NAME,     // The table to query
-                columns,  // The array of columns to return (pass null to get all)
-                whereClause,      // The columns for the WHERE clause
-                whereArgs,//whereArgs,  // The values for the WHERE clause
+                columns,        // The array of columns to return (pass null to get all)
+                whereClause,    // The columns for the WHERE clause
+                whereArgs,      // The values for the WHERE clause
                 null,  // don't group the rows
                 null,   // don't filter by row groups
                 null   // The sort order
@@ -63,37 +65,37 @@ public class CostManagerDB{
     }
 
     public int update(String TABLE_NAME, ContentValues values, String whereClause, String[] whereArgs){
+        Log.i(Names.logTAG, "Inside update function");
         //values = {key1: "", key2: "", key3: ""}, whereClause = Names.UID + " = ?", whereArgs = { num as string}
         //values = {key1: "", key2: "", key3: ""}, whereClause = Names.TID + " = ?", whereArgs = { num as string}
         return this.DBHelper.getWritableDatabase().update(TABLE_NAME, values, whereClause, whereArgs);
     }
 
     public int delete(String TABLE_NAME, String whereClause, String[] whereArgs){
+        Log.i(Names.logTAG, "Inside update function");
         //whereClause = Names.UID + " = ?", whereArgs = { num as string}
         //whereClause = Names.TID + " = ?", whereArgs = { num as string}
         return this.DBHelper.getWritableDatabase().delete(TABLE_NAME,whereClause, whereArgs);
     }
 
-    public int getDataFromProfileTable(Cursor cursor){
-        System.out.println("inside db.getDataFromProfileTable");
+    public int getDataFromProfileTable(Cursor cursor) throws CostManagerException{
+        Log.i(Names.logTAG, "Inside getDataFromProfileTable function");
+        int res = -1;
         try{
-            int res = -1;
             while (cursor.moveToNext()) {
                 res = cursor.getInt(cursor.getColumnIndex(Names.UID));
-                System.out.println("res: ");
-                System.out.println(res);
             }
-            return res;
-        } catch (Exception e){
-            System.out.println("got error:");
-            System.out.println(e.getMessage());
-            System.out.println(e.fillInStackTrace().toString());
-            return -1;
+            cursor.close();
+        } catch (CursorIndexOutOfBoundsException e){
+            Log.i(Names.logTAG, "error in getDataFromProfileTable function");
+            throw new CostManagerException(e.getMessage(), e.getCause());
         }
+        return res;
     }
 
-    public JSONObject getDataFromTransactionsTable(Cursor cursor) {
-        JSONObject result = new JSONObject();
+    public JSONObject getDataFromTransactionsTable(Cursor cursor) throws CostManagerException{
+        Log.i(Names.logTAG, "Inside getDataFromTransactionsTable function");
+        JSONObject res = new JSONObject();
         JSONArray ja = new JSONArray();
         try {
             while (cursor.moveToNext()){
@@ -111,10 +113,11 @@ public class CostManagerDB{
                 ja.put(jo);
             }
             cursor.close();
-            result.put("array", ja);
-            } catch (/*JSONException |*/ Exception e) {
-                System.out.println("Error in cursor\n" + e.getMessage());
+            res.put("array", ja);
+            } catch (JSONException | CursorIndexOutOfBoundsException e) {
+                Log.e(Names.logTAG, "error in getDataFromTransactionsTable function", e.getCause());
+                throw new CostManagerException(e.getMessage(), e.getCause());
         }
-        return result;
+        return res;
     }
 }

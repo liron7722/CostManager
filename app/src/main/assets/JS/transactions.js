@@ -1,7 +1,11 @@
-function getData(){
-    let info = JSON.stringify({"columns": null,
-                               "whereClause": "id = ?",
-                               "whereArgs": []});
+window.onerror = handlingError;
+
+function getData() {
+    let info = JSON.stringify({
+        "columns": null,
+        "whereClause": "id = ?",
+        "whereArgs": []
+    });
     let stringRequest = JSON.stringify({ "cmd": "get", "table": "Transactions", "data": info });
     window.vm.Request(stringRequest);
 }
@@ -11,36 +15,45 @@ function handleResponse(input) {
     console.log(input);
     window.data = JSON.parse(input)["array"];
     updateTable(window.data);
+    $("#Table").table("rebuild");
 }
 
 function updateTable(data) {
     let addedRows = 1;
     let table = document.getElementById("Table");
-    for(let index = addedRows, j = 1; index < data.length + addedRows; index++, j++){
+    for (let index = addedRows, j = 1; index < data.length + addedRows; index++, j++) {
         AddTableRow(data[index - addedRows], index, j, table);
     }
 }
 
-function AddTableRow(data, index, j, table){
+function AddTableRow(data, index, j, table) {
     let col = 0;
-    let row = table.insertRow(index);  // create row
-    AddTableCell(j, col++, row);  // number of row added
-    for(let value in data){
-        AddTableCell(data[value], col++, row);  // insert values
-    }        
+    let row = table.insertRow(index); // create row
+    AddTableCell(j, col++, row); // number of row added
+    for (let value in data) {
+        AddTableCell(data[value], col++, row); // insert values
+    }
 }
 
-function AddTableCell(value, index, row){
-    let cell = row.insertCell(index);  // add cell
-    if (index === 9){
-        cell.innerHTML = '<input type="button" value=value data-role="button" data-icon="delete" data-iconpos="notext">'
-    }
-    else
+function AddTableCell(value, index, row) {
+    let cell = row.insertCell(index); // add cell
+    if (index === 10) {
+
+        let btn = document.createElement('input');
+        btn.type = "button";
+        btn.className = "btn";
+        btn.icon = "delete";
+        //btn.iconpos = "notext";
+        btn.value = value;
+        //btn.onclick = DeleteTableRow()
+        cell.appendChild(btn);
+        //cell.attributes = '<input type="button" value=value data-role="button" data-icon="delete" data-iconpos="notext">'
+    } else
         cell.innerHTML = value;
 }
 
 function DeleteTableRow(index) {
-  document.getElementById("Table").deleteRow(index);
+    document.getElementById("Table").deleteRow(index);
 }
 
 $("button.panelButton").on({
@@ -52,8 +65,6 @@ $("button.panelButton").on({
 });
 
 getData();
-
-//$(#Transactions).hide().trigger("updatelayout");
 
 /*$(document).ready(function() {
     $('[data-toggle="toggle"]').change(function(){

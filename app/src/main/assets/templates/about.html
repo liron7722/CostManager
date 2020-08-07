@@ -6,10 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <!-- CSS -->
-    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
     <link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" href="../static/jquery.mobile-1.4.5.min.css" />
-
+    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
     <title>Cost Manager</title>
 </head>
 
@@ -17,41 +16,36 @@
     <main role="main" class="container">
         <div data-role="header" style="overflow:hidden">
             <h1>Cost Manager</h1>
-                <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
-                <div data-role="navbar" data-grid="c">
-                    <ul>
-                    <li><button class='navbarButton' id="home" value="home">Home</button></li>
-                    <li><button class="navbarButton" id="report" value="balance">Balance Report</button></li>
-                    <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
-                    </ul>
-                </div><!-- /navbar -->
+            <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+            <div data-role="navbar">
+                <ul>
+                    <li><button class='ui-btn-active' id="home" value="home">Home</button></li>
+                    <li><button class="navbarButton" id="report" value="balance">Balance Report</button></li>
+                    <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
+                </ul>
+            </div><!-- /navbar -->
         </div><!-- /header -->
-
         <div data-role="panel" id="panel" data-display="push" data-position-fixed="true">
             <div>
                 <button class="panelButton" id="about" value="about">About</button>
                 <button class="panelButton" id="profile" value="profile">Profile</button>
                 <button class="panelButton" id="settings" value="settings">Settings</button>
             </div>
-
             <div>
                 <button class="panelButton" id="logout" value="welcome">Log Out</button>
                 <a href="#" data-rel="close">Close panel</a>
             </div>
         </div><!-- /panel -->
-
-        <p>
+        <p id="creators">
             This is Project in developing apps for mobile devices.<br>
             This is Project made by <b>Liron Revah</b> and <b>Or Ohana</b>.
         </p>
     </main>
-
     <!-- JQuery -->
     <script src="../JS/jquery-1.11.1.min.js"></script>
     <script src="../JS/jquery.mobile-1.4.5.min.js"></script>
     <!-- JS -->
     <script src="../JS/connect.js"></script>
-
 </body>
 
 </html>

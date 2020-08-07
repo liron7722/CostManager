@@ -1,3 +1,4 @@
+window.onerror = handlingError;
 
 $("button#addTransaction").on({
     click: function() {

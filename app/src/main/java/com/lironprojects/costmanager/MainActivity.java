@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.lironprojects.costmanager.Models.RequestHandler;
 import com.lironprojects.costmanager.ViewModels.ViewModel;
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.webView.addJavascriptInterface(vm, "vm");
         setContentView(this.webView);
-
     }
 
     @Override

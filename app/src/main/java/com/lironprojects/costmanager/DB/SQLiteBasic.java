@@ -1,8 +1,10 @@
 package com.lironprojects.costmanager.DB;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class SQLiteBasic extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "CostManager.db";    // Database Name
@@ -13,11 +15,13 @@ public class SQLiteBasic extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase db){
         try {
+            Log.i(Names.logTAG, "SQL DB onCreate");
             this.createProfileTable(db);
             this.createTransactionTable(db);
-        } catch (Exception e) {
+            Log.i(Names.logTAG, "SQL DB onCreate Finished");
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -25,10 +29,11 @@ public class SQLiteBasic extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
-            System.out.println("OnUpgrade");
+            Log.i(Names.logTAG, "SQL DB onUpgrade Finished");
             dropTable(db);
             onCreate(db);
-        }catch (Exception e) {
+            Log.i(Names.logTAG, "SQL DB onUpgrade Finished");
+        }catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -36,6 +41,7 @@ public class SQLiteBasic extends SQLiteOpenHelper {
     private void dropTable(SQLiteDatabase db){
         for (String table_name : Names.Table_Names) {
             db.execSQL("DROP TABLE IF EXISTS " + table_name);
+            Log.i(Names.logTAG, "SQL DB " + table_name + " dropped");
         }
     }
 
@@ -47,6 +53,7 @@ public class SQLiteBasic extends SQLiteOpenHelper {
                 + ", " + Names.Password + " text NOT NULL"
                 + ");";
         db.execSQL(sql);
+        Log.i(Names.logTAG, "SQL DB " + Names.Profile_Table + " created");
     }
 
     private void createTransactionTable(SQLiteDatabase db){
@@ -64,5 +71,6 @@ public class SQLiteBasic extends SQLiteOpenHelper {
                 + ", " + Names.PaymentType + " text NOT NULL"
                 + ");";
         db.execSQL(sql);
+        Log.i(Names.logTAG, "SQL DB " + Names.Transactions_Table + " created");
     }
 }

@@ -1,17 +1,19 @@
-function updateSettings() {
-    var weeklybudget = document.getElementById("weeklybudget").value;
-    var incomeColor = document.getElementById("incomeColor").value;
-    var expenseColor = document.getElementById("expenseColor").value;
+window.onerror = handlingError;
 
-    if (weeklybudget.length > 0 && prevWB != weeklybudget)
-        window.vm.updateSettings("WeeklyBudget", weeklybudget);
-    if (incomeColor.length > 0 && prevIC != incomeColor)
+function updateSettings() {
+    let weeklyBudget = document.getElementById("weeklybudget").value;
+    let incomeColor = document.getElementById("incomeColor").value;
+    let expenseColor = document.getElementById("expenseColor").value;
+
+    if (weeklyBudget.length > 0 && prevWB !== weeklyBudget)
+        window.vm.updateSettings("WeeklyBudget", weeklyBudget);
+    if (incomeColor.length > 0 && prevIC !== incomeColor)
         window.vm.updateSettings("IncomeColor", incomeColor);
-    if (expenseColor.length > 0 && prevEC != expenseColor)
+    if (expenseColor.length > 0 && prevEC !== expenseColor)
         window.vm.updateSettings("ExpensesColor", expenseColor);
 }
 
-function loadSettings(){
+function loadSettings() {
     document.getElementById("weeklybudget").value = window.vm.getSettings("WeeklyBudget");
     document.getElementById("incomeColor").value = window.vm.getSettings("IncomeColor");
     document.getElementById("expenseColor").value = window.vm.getSettings("ExpensesColor");

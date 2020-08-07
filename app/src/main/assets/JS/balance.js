@@ -1,7 +1,11 @@
-function getData(){
-    let info = JSON.stringify({"columns": null,
+window.onerror = handlingError;
+
+function getData() {
+    let info = JSON.stringify({
+        "columns": null,
         "whereClause": "id = ?",
-        "whereArgs": []});
+        "whereArgs": []
+    });
     let stringRequest = JSON.stringify({ "cmd": "get", "table": "Transactions", "data": info });
     window.vm.Request(stringRequest);
 }
@@ -13,7 +17,7 @@ function handleResponse(input) {
     showCharts(window.data);
 }
 
-function rgbaRandom(){
+function rgbaRandom() {
     let r = Math.floor(Math.random() * 255);
     let g = Math.floor(Math.random() * 255);
     let b = Math.floor(Math.random() * 255);
@@ -25,11 +29,10 @@ function transactionsChart(data) {
     let dataNum = [];
     let bgC = [];
     let bC = [];
-    let legends = [];
     let rgbaGreen = 'rgba(41, 241, 195, 1)';
     let rgbaRed = 'rgba(246, 36, 89, 1)';
     let stringColor;
-    data.forEach(function(ta){
+    data.forEach(function(ta) {
         lb.push(ta.TName);
         dataNum.push(ta.Price);
         if (ta.isIncome === "1")
@@ -39,14 +42,14 @@ function transactionsChart(data) {
         bgC.push(stringColor);
         bC.push(stringColor);
     });
-    legends.push({'Inc': rgbaGreen, 'Exp': rgbaRed});
-    let ctx = document.getElementById('myChart').getContext('2d');
+    let ctx = document.getElementById('barChart').getContext('2d');
     let myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: lb,
             datasets: [{
-                label: legends,
+                label: ['x', 'z'],
+                //labelString: ['x', 'z'],
                 data: dataNum,
                 backgroundColor: bgC,
                 borderColor: bC,
@@ -70,5 +73,3 @@ function showCharts(data) {
 }
 
 getData();
-
-

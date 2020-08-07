@@ -1,37 +1,38 @@
-table { 
-	border-collapse: collapse; 
-	margin:50px auto;
-	width: 100%;
-	}
+table {
+    border-collapse: collapse;
+    margin: 50px auto;
+    width: 100%;
+}
 
 th {
-	background: #3498db; 
-	color: black; 
-	font-weight: bold;
-	}
+    background: #3498db;
+    color: black;
+    font-weight: bold;
+}
 
-td, th { 
-	padding: 10px; 
-	border: 1px solid #ccc; 
-	text-align: center; 
-	font-size: 18px;
-	}
+td,
+th {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 18px;
+}
 
 .labels tr td {
-	background-color: #2cc16a;
-	font-weight: bold;
-	color: #fff;
+    background-color: #2cc16a;
+    font-weight: bold;
+    color: #fff;
 }
 
 .label tr td label {
-	display: block;
+    display: block;
 }
 
 
 [data-toggle="toggle"] {
-	display: none;
+    display: none;
 }
 
 #filterInput {
-	width: 100%;
+    width: 100%;
 }

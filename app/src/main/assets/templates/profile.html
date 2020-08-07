@@ -6,10 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <!-- CSS -->
-    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
     <link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" href="../static/jquery.mobile-1.4.5.min.css" />
-
+    <link rel="stylesheet" href="../themes/cost-Manager.min.css" />
+    <link rel="stylesheet" href="../themes/cost-Manager-utils.css" />
     <title>Cost Manager</title>
 </head>
 
@@ -17,56 +17,46 @@
     <main role="main" class="container">
         <div data-role="header" style="overflow:hidden">
             <h1>Cost Manager</h1>
-                <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+            <a href="#panel" data-icon="gear" class="ui-btn-right">Options</a>
+            <div data-role="navbar">
+                <ul>
+                    <li><button class='navbarButton' id="home" value="home">Home</button></li>
+                    <li><button class="navbarButton" id="report" value="balance">Balance Report</button></li>
+                    <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
+                </ul>
+            </div><!-- /navbar -->
         </div><!-- /header -->
-
-            <div data-role="navbar" data-grid="c">
-                <ul>
-                <li><button class='navbarButton' id="home" value="home">Home</button></li>
-                <li><button class="navbarButton" id="report" value="balance">Balance Report</button></li>
-                <li><button class='navbarButton' id="getTransaction" value="transactions">My Transactions</button></li>
-                </ul>
-            </div><!-- /navbar -->
-
         <div data-role="panel" id="panel" data-display="push" data-position-fixed="true">
             <div>
                 <button class="panelButton" id="about" value="about">About</button>
                 <button class="panelButton" id="profile" value="profile">Profile</button>
                 <button class="panelButton" id="settings" value="settings">Settings</button>
             </div>
-
             <div>
                 <button class="panelButton" id="logout" value="welcome">Log Out</button>
                 <a href="#main" data-rel="close">Close panel</a>
             </div>
         </div><!-- /panel -->
-
-        <div class="content-section">
+        <div class="ui-content">
             <form name="ProfileForm" onsubmit="" method="post">
                 <div class="container">
                     <h1>Profile</h1>
                     <hr>
                     <label for="name"><b>Name</b></label>
-                    <br>
-                    <input type="text" placeholder="Enter Your Name" name="name" id="name" pattern="^[a-zA-Z]{2,20}(?: [a-zA-Z]{2,20}){0,1}$"
-                    title="Must contain valid name!">
+                    <input type="text" placeholder="Enter Your Name" name="name" id="name" pattern="^[a-zA-Z]{2,20}(?: [a-zA-Z]{2,20}){0,1}$" title="Must contain valid name!">
                     <br>
                     <label for="email"><b>Email</b></label>
-                    <br>
                     <input type="email" placeholder="Enter Email" name="email" id="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" title="Must contain valid email address!">
                     <br>
                     <label for="password"><b>Password</b></label>
-                    <br>
                     <input type="password" placeholder="Enter Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">
                     <br>
                     <label for="confirm_password"><b>Repeat Password</b></label>
-                    <br>
-                    <input type="password" placeholder="Repeat Password" name="confirm_password" id="confirm_password"
-                    title="Passwords must match">
-                    <hr>
+                    <input type="password" placeholder="Repeat Password" name="confirm_password" id="confirm_password" title="Passwords must match">
+                    <hr>ד
                     <div class="form-group">
-                      <button name="cancel" value="cancel">Cancel</button>
-                    <button type="submit" name="submit" value="Submit">Submit</button>
+                        <button name="cancel" id="cancel" class="cancel-button">Cancel</button>
+                        <button type="submit" name="submit" value="Submit" class="confirm-button">Submit</button>
                     </div>
                 </div>
             </form>
@@ -78,6 +68,6 @@
     <!-- JS -->
     <script src="../JS/connect.js"></script>
     <script src="../JS/profile.js"></script>
-
 </body>
+
 </html>

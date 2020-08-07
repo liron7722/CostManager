@@ -1,4 +1,6 @@
-var password = document.getElementById("password")
+window.onerror = handlingError;
+
+var password = document.getElementById("password");
 var confirm_password = document.getElementById("confirm_password");
 
 function validatePassword() {
@@ -24,7 +26,7 @@ function register() {
     window.vm.Request(stringRequest);
 }
 
-function handleResponse(response){
+function handleResponse(response) {
     if (response)
-        location.href='home.html';
+        location.href = 'home.html';
 }
