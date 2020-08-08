@@ -16,22 +16,47 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This is the model in our MVVM design.
+ * Handle all the requests, control the db.
+ *
+ * @author Liron Revah and Or Ohana
+ */
 public class RequestHandler {
     private CostManagerDB db;
     private JSONObject response;
 
+    /**
+     * create db.
+     * @param context Application Context
+     */
     public RequestHandler(Context context){
         this.db = new CostManagerDB(context);
     }
 
+    /**
+     * simple getter
+     * @return response after handling the request.
+     */
     public JSONObject getResponse() {
         return response;
     }
 
+    /**
+     * simple setter.
+     * reset the response after using it.
+     */
     public void resetResponse(){
         response = null;
     }
 
+    /**
+     * call for another handleRequest after changing request string to json object request.
+     *
+     * @param request the request as json.toString()
+     * @param id user id
+     * @throws CostManagerException if error accord.
+     */
     public void handleRequest(String request, int id) throws CostManagerException {
         try{
             handleRequest(new JSONObject(request), id);
@@ -42,9 +67,19 @@ public class RequestHandler {
         }
     }
 
+    /**
+     *
+     * @param request the request as json object ready to be used
+     * @param id user id
+     * @throws CostManagerException if error accord.
+     */
     public void handleRequest(JSONObject request, int id) throws CostManagerException{
         Log.i(Names.logTAG, "Inside handleRequest function");
         JSONObject response = new JSONObject();
+        /*
+            switch case using the values of the cmd and table key to identify why function to run.
+            creating the response for that request.
+         */
         try {
             String cmd = request.getString(Names.Command);
             String table = request.getString(Names.Table);
@@ -139,24 +174,34 @@ public class RequestHandler {
             }
             this.response = response;
         }catch (JSONException e){
-            this.response = couldNotResponse();
+            couldNotResponse();
             Log.e(Names.logTAG, "error in handleRequest function", e.getCause());
             throw new CostManagerException(e.getMessage(), e.getCause());
         }
     }
 
-    private JSONObject couldNotResponse() throws CostManagerException{
+    /**
+     *
+     * @throws CostManagerException if JSONException error may accord.
+     */
+    private void couldNotResponse() throws CostManagerException{
         JSONObject response = new JSONObject();
         try {
             response.put(Names.ResultMsg, "Failed");
             response.put(Names.Data, false);
+            this.response = response;
         }catch (JSONException e) {
+            this.response = response;
             Log.e(Names.logTAG, "error in couldNotResponse function", e.getCause());
             throw new CostManagerException(e.getMessage(), e.getCause());
         }
-        return response;
     }
 
+    /**
+     * separated values using regex
+     * @param toSplit the string contain values to be separated.
+     * @return separated values in string array.
+     */
     private String[] splitStrings(String toSplit){
         List<String> allMatches = new ArrayList<>();
         Matcher m = Pattern.compile("([^\\W_]+[^\\s,]*)")

@@ -1,5 +1,11 @@
 package com.lironprojects.costmanager.DB;
 
+
+/**
+ * Class for storing strings name used in more than one place
+ *
+ * @author Liron Revah and Or Ohana
+ */
 public class Names {
     /* log Tag */
     public static final String logTAG = "CostManager";
@@ -32,12 +38,13 @@ public class Names {
     protected static final String[] Transactions_cols = {UID, TID, Amount, TName, Price,
                                             isIncome, Category, Currency, Description, PaymentType};
 
+    // keys for request json
     public static final String Command = "cmd";
     public static final String Table = "table";
     public static final String Data = "data";
 
+    // keys for response json
     public static final String ResultMsg = "toast";
-    public static final String URL = "url";
     public static final String newID = "newID";
 
 }

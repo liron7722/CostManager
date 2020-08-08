@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.util.Log;
 
-
 import com.lironprojects.costmanager.Models.CostManagerException;
 
 import org.json.JSONArray;
@@ -15,13 +14,34 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+/**
+ * Manage sql lite db such as insert, get, update and delete using the SQLiteBasic helper.
+ *
+ * @see SQLiteBasic
+ * @author Liron Revah and Or Ohana
+ */
 public class CostManagerDB{
+    // local variable
     private SQLiteBasic DBHelper;
 
+    /**
+     * Creating SQLiteBasic helper.
+     * @param context Application Context
+     * @see SQLiteBasic
+     */
     public CostManagerDB(Context context){
         this.DBHelper = new SQLiteBasic(context);
     }
 
+    /**
+     * Insert the parameters given into the db.
+     * placing all parameters into ContentValues before sending them into db.
+     *
+     * @param name Name of the user.
+     * @param password Password of the user.
+     * @param email Email of the user.
+     * @return user id as number > 0 if insert successfully, else -1
+     */
     public long insertToProfileTable(String name, String password, String email) {
         Log.i(Names.logTAG, "Inside insertToProfileTable function");
         ContentValues values = new ContentValues();
@@ -32,6 +52,22 @@ public class CostManagerDB{
                                                             null, values);
     }
 
+    /**
+     *
+     * Insert the parameters given into the db.
+     * placing all parameters into ContentValues before sending them into db.
+     *
+     * @param id as user id.
+     * @param date String of the transaction date.
+     * @param amount number of items in the transaction.
+     * @param name name of the transaction.
+     * @param price price of the transaction.
+     * @param isIncome boolean T/F showing if the transaction is income or expense.
+     * @param category category of the transaction.
+     * @param currency currency of the transaction, like USD and NIS.
+     * @param description user input on the transaction.
+     * @param paymentType payment Type such ad cash and credit.
+     */
     public void insertToTransactionTable(int id, String date, int amount, String name, double price,
                                          boolean isIncome, String category, String currency,
                                          String description, String paymentType) {
@@ -50,6 +86,15 @@ public class CostManagerDB{
         this.DBHelper.getWritableDatabase().insert(Names.Transactions_Table, null, values);
     }
 
+    /**
+     * query the db using given parameters.
+     *
+     * @param TABLE_NAME the table name to get the information from.
+     * @param columns the columns of the table to return.
+     * @param whereClause the columns to filter the result.
+     * @param whereArgs the values for the clause to used to filter.
+     * @return Cursor contain the results from the query made.
+     */
     public Cursor query(String TABLE_NAME, String[] columns, String whereClause, String[] whereArgs){
         Log.i(Names.logTAG, "Inside query function, query values: table: " + TABLE_NAME + ", columns: " +
                 Arrays.toString(columns) + ", whereClause: " + whereClause + ", whereArgs: " + Arrays.toString(whereArgs));
@@ -64,6 +109,15 @@ public class CostManagerDB{
         );
     }
 
+    /**
+     * update certain rows on the db depends on given parameters.
+     *
+     * @param TABLE_NAME the table name to update information on.
+     * @param values new values to put in the rows.
+     * @param whereClause the columns to filter the result.
+     * @param whereArgs the values for the clause to used to filter.
+     * @return number greater then 0 if updated successfully, else -1.
+     */
     public int update(String TABLE_NAME, ContentValues values, String whereClause, String[] whereArgs){
         Log.i(Names.logTAG, "Inside update function");
         //values = {key1: "", key2: "", key3: ""}, whereClause = Names.UID + " = ?", whereArgs = { num as string}
@@ -71,6 +125,14 @@ public class CostManagerDB{
         return this.DBHelper.getWritableDatabase().update(TABLE_NAME, values, whereClause, whereArgs);
     }
 
+    /**
+     * delete certain rows on the db depends on given parameters.
+     *
+     * @param TABLE_NAME the table name to delete information from.
+     * @param whereClause the columns to filter the result.
+     * @param whereArgs the values for the clause to used to filter.
+     * @return number greater then 0 if deleted successfully, else -1.
+     */
     public int delete(String TABLE_NAME, String whereClause, String[] whereArgs){
         Log.i(Names.logTAG, "Inside update function");
         //whereClause = Names.UID + " = ?", whereArgs = { num as string}
@@ -78,6 +140,13 @@ public class CostManagerDB{
         return this.DBHelper.getWritableDatabase().delete(TABLE_NAME,whereClause, whereArgs);
     }
 
+    /**
+     * used only for login to the system.
+     *
+     * @param cursor from the query made.
+     * @return user id number greater than 0 if exist, else -1.
+     * @throws CostManagerException if error accord.
+     */
     public int getDataFromProfileTable(Cursor cursor) throws CostManagerException{
         Log.i(Names.logTAG, "Inside getDataFromProfileTable function");
         int res = -1;
@@ -93,6 +162,13 @@ public class CostManagerDB{
         return res;
     }
 
+    /**
+     *
+     * @param cursor from the query made.
+     * @return all the transaction info from the query made.
+     *          Example: "array': {{{"key1": value1, "key2": value2, ...}}, {...}, {...}}
+     * @throws CostManagerException if JSONException or CursorIndexOutOfBoundsException error may accord.
+     */
     public JSONObject getDataFromTransactionsTable(Cursor cursor) throws CostManagerException{
         Log.i(Names.logTAG, "Inside getDataFromTransactionsTable function");
         JSONObject res = new JSONObject();

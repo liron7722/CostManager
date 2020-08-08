@@ -1,4 +1,4 @@
-package com.lironprojects.costmanager;
+package com.lironprojects.costmanager.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,11 +12,27 @@ import android.webkit.WebViewClient;
 import com.lironprojects.costmanager.Models.RequestHandler;
 import com.lironprojects.costmanager.ViewModels.ViewModel;
 
+/**
+ * MainActivity for the app.
+ * web view as view, viewModel that control the flow between view and model and model control the db.
+ *
+ * @author Liron Revah and Or Ohana
+ */
 public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
     private static final String localSP ="com.lironprojects.costmanager.Settings";
 
+    /**
+     * create web view as view, viewModel and model.
+     * connect between view and model to viewModel.
+     * add viewModel as web view js interface.
+     *
+     * @param savedInstanceState Instance State of the app
+     * @see WebView
+     * @see RequestHandler
+     * @see ViewModel
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +50,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(this.webView);
     }
 
+    /**
+     * disable js on web view.
+     * pause the app.
+     */
     @Override
     public void onPause() {
-        super.onPause();
         this.webView.getSettings().setJavaScriptEnabled(false);
+        super.onPause();
     }
 
+    /**
+     * enable js on web view.
+     * resume the app.
+     */
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onResume(){
@@ -47,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
         this.webView.getSettings().setJavaScriptEnabled(true);
     }
 
+    /**
+     *
+     * @param keyCode the code of the event occur.
+     * @param event the event to make.
+     * @return true if user press back button and web view have previous page.
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Check if the key event was the Back button and if there's history

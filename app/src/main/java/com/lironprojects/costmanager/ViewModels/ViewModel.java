@@ -16,96 +16,160 @@ import org.json.JSONException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
+/**
+ * relay the requests from the view to the model.
+ * relay the responses from the model to the view.
+ * handle toasts shared preferences.
+ *
+ * @author Liron Revah and Or Ohana
+ */
 public class ViewModel {
+    // strings for local use
     private static final String uID = "id";
     private static final String wB = "WeeklyBudget";
     private static final String iC = "IncomeColor";
     private static final String eC = "ExpensesColor";
 
-    private static final String welcomeURL = "file:///android_asset/templates/welcome.html";
+    // home page url
     private static final String homeURL = "file:///android_asset/templates/home.html";
 
+    // local variables
     private WebView view;
     private Context context;
     private SharedPreferences sp;
     private RequestHandler handler;
     private ExecutorService service = Executors.newFixedThreadPool(4);
 
+    /**
+     * simple setter
+     * @param v Application web view that display in screen
+     * @see WebView
+     */
     public void setView(WebView v){
         this.view = v;
         this.view.loadUrl(homeURL);
     }
+
+    /**
+     * simple setter
+     * @param c Application Context
+     */
     public void setContext(Context c){
         this.context = c;
     }
+
+    /**
+     * simple setter
+     * @param sp shared preferences.
+     * @see SharedPreferences
+     */
     public void setSP(SharedPreferences sp){
         this.sp = sp;
     }
+
+    /**
+     * simple setter
+     * @param model RequestHandler.
+     * @see RequestHandler
+     */
     public void setModel(RequestHandler model){
         this.handler = model;
     }
 
+    /**
+     * handle the errors in the view.
+     * log the error for future review
+     * @param message contain the error that occur in the view
+     */
     @android.webkit.JavascriptInterface
     public void handlingError(String message){
         Log.e(Names.logTAG, message);
-        Message.message(this.context, "Error occurred in JavaScript");
+        // Message.message(this.context, "Error occurred in JavaScript");
     }
 
+    /**
+     * go to previous page after back button pressed in view
+     */
     @android.webkit.JavascriptInterface
     public void previous(){
         this.view.goBack();
     }
 
+    /**
+     *
+     * @return T/F if user id is logged or not
+     */
     @android.webkit.JavascriptInterface
     public boolean loginStatus(){
         return sp.getInt(uID, -1) > 0;
     }
 
+    /**
+     * log user out of the system.
+     * display log out toast after.
+     */
     @android.webkit.JavascriptInterface
     public void logOut(){
         this.sp.edit().putInt(uID,-1).apply();
         Message.message(this.context,"Logged out successfully");
     }
 
+    /**
+     *
+     * @param key the setting user want to change
+     * @param value the new value to save
+     * @return true after saved, false if empty parameters send.
+     */
     @android.webkit.JavascriptInterface
     public boolean updateSettings(String key, String value) {
+        if (value.isEmpty())
+            return false;
         switch (key) {
             case wB:
                 this.sp.edit().putInt(wB,Integer.parseInt(value)).apply();
-                break;
+                return true;
             case iC:
                 this.sp.edit().putString(iC,value).apply();
-                break;
+                return true;
             case eC:
                 this.sp.edit().putString(eC,value).apply();
-                break;
+                return true;
         }
-        return true;
+        return false;
     }
 
+    /**
+     *
+     * @param key the setting user want to see.
+     * @return value of the requested key, empty if key not exist.
+     */
     @android.webkit.JavascriptInterface
     public String getSettings(String key) {
-        String result = "";
         switch (key) {
             case uID:
-                result = String.valueOf(sp.getInt(uID, -1));
-                break;
+                return String.valueOf(sp.getInt(uID, -1));
             case wB:
-                result = String.valueOf(sp.getInt(wB, 0));
-                break;
+                return String.valueOf(sp.getInt(wB, 0));
             case iC:
-                result  = sp.getString(iC, "green");
-                break;
+                return sp.getString(iC, "green");
             case eC:
-                result  = sp.getString(eC, "red");
-                break;
+                return sp.getString(eC, "red");
         }
-        return result;
+        return "";
     }
 
+    /**
+     *
+     * @param request the user request. contain json object as string.
+     */
     @android.webkit.JavascriptInterface
     public void Request(final String request) {
         final String data;
+
+        /*
+            getting user id.
+            running new thread executor to handle the request.
+         */
         this.service.submit(new Runnable() {
             @Override
             public void run() {
@@ -118,9 +182,16 @@ public class ViewModel {
                 }
             }
         });
+
+        /*
+            handling the response made.
+            make toast if needed.
+            send view information requested.
+         */
         try {
             Log.i(Names.logTAG, "After service.submit");
 
+            // loop waiting for the response be ready in the other thread.
             JSONObject response = handler.getResponse();
             while (response == null)
                 response = handler.getResponse();
@@ -140,6 +211,8 @@ public class ViewModel {
             // send requested data
             if (response.has(Names.Data)) {
                 data = response.getString(Names.Data);
+
+                // send response data in view thread.
                 view.post(new Runnable() {
                     @Override
                     public void run() {
@@ -148,7 +221,8 @@ public class ViewModel {
                     }
                 });
             }
-            handler.resetResponse();
+
+            handler.resetResponse(); // reset the saved response.
         }catch (JSONException e){
             Log.e(Names.logTAG, "Error getting data from response json", e.getCause());
         }

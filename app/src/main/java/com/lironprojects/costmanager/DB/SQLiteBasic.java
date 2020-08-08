@@ -6,14 +6,29 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * sql lite adapter manage the db.
+ *
+ * @author Liron Revah and Or Ohana
+ */
 public class SQLiteBasic extends SQLiteOpenHelper {
+    // local variables
     private static final String DATABASE_NAME = "CostManager.db";    // Database Name
     private static final int DATABASE_Version = 1;    // Database Version
 
+    /**
+     * Open database with DATABASE_NAME and DATABASE_Version local variables.
+     *
+     * @param context Application Context
+     */
     SQLiteBasic(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_Version);
     }
 
+    /**
+     * create db tables if they not exists
+     * @param db our db.
+     */
     @Override
     public void onCreate(SQLiteDatabase db){
         try {
@@ -26,6 +41,13 @@ public class SQLiteBasic extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * delete the current db and create new one.
+     *
+     * @param db our db.
+     * @param oldVersion the old version on db.
+     * @param newVersion the new version on db.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
@@ -34,10 +56,15 @@ public class SQLiteBasic extends SQLiteOpenHelper {
             onCreate(db);
             Log.i(Names.logTAG, "SQL DB onUpgrade Finished");
         }catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Log.e(Names.logTAG, "Error occur upgrading the db", e.getCause());
         }
     }
 
+    /**
+     * delete tables in db.
+     *
+     * @param db our db.
+     */
     private void dropTable(SQLiteDatabase db){
         for (String table_name : Names.Table_Names) {
             db.execSQL("DROP TABLE IF EXISTS " + table_name);
@@ -45,6 +72,12 @@ public class SQLiteBasic extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * create the profile table using the Names class strings.
+     *
+     * @param db our db.
+     * @see Names
+     */
     private void createProfileTable(SQLiteDatabase db){
         String sql = "CREATE TABLE " + Names.Profile_Table + " ("
                 + Names.UID + " integer PRIMARY KEY AUTOINCREMENT"
@@ -56,6 +89,11 @@ public class SQLiteBasic extends SQLiteOpenHelper {
         Log.i(Names.logTAG, "SQL DB " + Names.Profile_Table + " created");
     }
 
+    /**
+     * create the transaction table using the Names class strings.
+     * @param db our db.
+     * @see Names
+     */
     private void createTransactionTable(SQLiteDatabase db){
         String sql = "CREATE TABLE " + Names.Transactions_Table + " ("
                 + Names.UID + " integer NOT NULL" //FOREIGN KEY REFERENCES profile(id)"
