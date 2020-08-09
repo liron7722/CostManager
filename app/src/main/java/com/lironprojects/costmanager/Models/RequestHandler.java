@@ -84,7 +84,7 @@ public class RequestHandler {
             String cmd = request.getString(Names.Command);
             String table = request.getString(Names.Table);
             JSONObject requestData = new JSONObject(request.getString(Names.Data));
-            int result;
+            int result = -1;
             Log.i(Names.logTAG, "Got " + cmd +" Command");
             switch (cmd) {
                 case "insert":
@@ -104,10 +104,11 @@ public class RequestHandler {
                             }
                             break;
                         case Names.Transactions_Table:
+                            // Creating one or more transactions
                             if (requestData.getBoolean(Names.isRepeat) && requestData.getInt(Names.Repeat) > 0)
                                 for (int i = 1; i <= requestData.getInt(Names.Repeat); i++)
                                     db.insertToTransactionTable(id,
-                                            requestData.getString(Names.Date),
+                                            changeDate(requestData.getString(Names.Date), i),
                                             requestData.getInt(Names.Amount),
                                             requestData.getString(Names.TName) + " - " + i,
                                             requestData.getDouble(Names.Price),
@@ -137,6 +138,7 @@ public class RequestHandler {
                     Log.i(Names.logTAG, "Trying to get info from " + table + " table");
                     switch (table) {
                         case Names.Profile_Table:
+                            // this will return only the user id
                             cursor = db.query(table,
                                     new String[]{requestData.get("columns").toString()},
                                     requestData.getString("whereClause"),
@@ -152,6 +154,7 @@ public class RequestHandler {
                             }
                             break;
                         case Names.Transactions_Table:
+                            // return all the data belong to that user id
                             cursor = db.query(table,
                                     null,
                                     requestData.getString("whereClause"),
@@ -162,9 +165,39 @@ public class RequestHandler {
                     }break;
 
                 case "update":
-                    result = db.update(table, (ContentValues) requestData.get("values"), requestData.getString("whereClause"), (String[]) requestData.get("whereArgs"));
-                    response.put(Names.ResultMsg, "Updated successfully");
-                    response.put(Names.Data, result);
+                    ContentValues values = new ContentValues();
+                    switch (table){
+                        case Names.Profile_Table:
+                            values.put(Names.Name, requestData.getString(Names.Name));
+                            values.put(Names.Password, requestData.getString(Names.Password));
+                            values.put(Names.Email, requestData.getString(Names.Email));
+                            result = db.update(table,
+                                    values,
+                                    requestData.getString("whereClause"),
+                                    new String[]{Integer.toString(id)});
+                            break;
+
+                        case Names.Transactions_Table:
+                            values.put(Names.UID, id);
+                            values.put(Names.Date, requestData.getString(Names.Date));
+                            values.put(Names.Amount, requestData.getInt(Names.Amount));
+                            values.put(Names.TName, requestData.getString(Names.TName));
+                            values.put(Names.Price, requestData.getDouble(Names.Price));
+                            values.put(Names.isIncome, requestData.getBoolean(Names.isIncome));
+                            values.put(Names.Category, requestData.getString(Names.Category));
+                            values.put(Names.Currency, requestData.getString(Names.Currency));
+                            values.put(Names.Description, requestData.getString(Names.Description));
+                            values.put(Names.PaymentType, requestData.getString(Names.PaymentType));
+                            result = db.update(table,
+                                    values,
+                                    requestData.getString("whereClause"),
+                                    (String[]) requestData.get("whereArgs"));
+                            break;
+                    }
+                    if (result > 0)
+                        response.put(Names.ResultMsg, "Updated successfully");
+                    else
+                        response.put(Names.ResultMsg, "Updated failed");
                     break;
 
                 case "delete":
@@ -181,7 +214,7 @@ public class RequestHandler {
     }
 
     /**
-     *
+     * put fail response in case we got error
      * @throws CostManagerException if JSONException error may accord.
      */
     private void couldNotResponse() throws CostManagerException{
@@ -210,5 +243,25 @@ public class RequestHandler {
             allMatches.add(m.group());
         }
         return allMatches.toArray(new String[]{});
+    }
+
+    /**
+     * fix date of repeat transactions
+     *
+     * @param oldDate string of given date
+     * @param i number of months to add
+     * @return updated date as string
+     */
+    private String changeDate(String oldDate, int i){
+        String[] date = oldDate.split("-");
+        if (i > 0) {
+            return (Integer.parseInt(date[0]) + (Integer.parseInt(date[1]) + i) / 12)
+                    + "-"
+                    + (Integer.parseInt(date[1]) + i) % 12
+                    + "-"
+                    + date[2];
+        }
+        else
+            return oldDate;
     }
 }

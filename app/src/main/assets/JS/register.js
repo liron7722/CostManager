@@ -1,21 +1,29 @@
 window.onerror = handlingError;
 
-var password = document.getElementById("password");
-var confirm_password = document.getElementById("confirm_password");
-
 function validatePassword() {
+    let password = document.getElementById("password");
+    let confirm_password = document.getElementById("confirm_password");
+
     if (password.value !== confirm_password.value) {
         confirm_password.setCustomValidity("Passwords Don't Match");
     } else {
         confirm_password.setCustomValidity('');
     }
 }
+$("#password").change(function () {
+    validatePassword();
+});
 
-//password.onchange = validatePassword;
-//confirm_password.onkeyup = validatePassword;
+$("#confirm_password").change(function () {
+    validatePassword();
+});
 
-$('#password').change(function() { validatePassword(); });
-$('#confirm_password').on('change', function() { validatePassword(); });
+
+$("#terms").on({
+    click: function() {
+        alert("This app on beta, bugs may happen.\nAll info given to the app saved only on the phone.");
+    }
+});
 
 function register() {
     let name = document.getElementById("name").value;
@@ -28,5 +36,5 @@ function register() {
 
 function handleResponse(response) {
     if (response)
-        location.href = 'home.html';
+        changeUrl('home.html');
 }

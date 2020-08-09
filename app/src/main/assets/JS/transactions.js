@@ -37,36 +37,18 @@ function AddTableRow(data, index, j, table) {
 
 function AddTableCell(value, index, row) {
     let cell = row.insertCell(index); // add cell
-    if (index === 10) {
-
-        let btn = document.createElement('input');
-        btn.type = "button";
-        btn.className = "btn";
-        btn.icon = "delete";
-        //btn.iconpos = "notext";
-        btn.value = value;
-        //btn.onclick = DeleteTableRow()
-        cell.appendChild(btn);
-        //cell.attributes = '<input type="button" value=value data-role="button" data-icon="delete" data-iconpos="notext">'
-    } else
+    if (index === 8){
+        if (value === "1")
+            cell.innerHTML = "True";
+        else
+            cell.innerHTML = "False";
+    }else
         cell.innerHTML = value;
 }
 
-function DeleteTableRow(index) {
-    document.getElementById("Table").deleteRow(index);
-}
-
-$("button.panelButton").on({
-    click: function() {
-        index = this.
-        document.getElementById("Table").deleteRow(index);
-
-    }
-});
-
 getData();
 
-/*$(document).ready(function() {
+$(document).ready(function() {
     $('[data-toggle="toggle"]').change(function(){
         $(this).parents().next('.hide').toggle();
     });
@@ -81,4 +63,3 @@ $(document).ready(function(){
     });
   });
 });
-*/

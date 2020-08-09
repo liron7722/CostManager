@@ -38,33 +38,22 @@
             </div>
         </div><!-- /panel -->
         <div class="ui-content">
-            <form name="loginForm" onsubmit="updateSettings()" method="post">
+            <form name="settingsForm" onsubmit="update()" method="post">
                 <div>
                     <h1>Settings</h1>
                     <hr>
                     <label for="weeklyBudget"><b>Weekly Budget</b></label>
                     <br>
-                    <input type="number" placeholder="Enter Weekly Budget" name="weeklyBudget" id="weeklyBudget" min="0" title="Must contain valid number 0 or above!">
+                    <input type="number" placeholder="Enter Weekly Budget" name="weeklyBudget" id="weeklyBudget" min="0"
+                           title="Must contain valid number 0 or above!">
                     <br>
-                    <label for="incomeColor"><b>Income Color</b></label><br>
-                    <select name="incomeColor" id="incomeColor" required>
-                        <option value="Green">Green</option>
-                        <option value="Yellow">Yellow</option>
-                        <option value="Red">Red</option>
-                        <option value="Blue">Blue</option>
-                        <option value="Black">Black</option>
-                    </select><br>
-                    <label for="expenseColor"><b>Expense Color</b></label><br>
-                    <select name="expenseColor" id="expenseColor" required>
-                        <option value="Green">Green</option>
-                        <option value="Yellow">Yellow</option>
-                        <option value="Red">Red</option>
-                        <option value="Blue">Blue</option>
-                        <option value="Black">Black</option>
-                    </select><br>
+                    <label for="incomeColor"><b>Income Color</b></label>
+                        <input type="color" data-clear-btn="false" name="incomeColor" id="incomeColor">
+                    <label for="expenseColor"><b>Expense Color</b></label>
+                        <input type="color" data-clear-btn="false" name="expenseColor" id="expenseColor">
                     <hr>
                     <div>
-                        <button name="cancel" id="cancel" onclick="window.vm.previous()" class="cancel-button">Cancel</button>
+                        <button name="cancel" id="cancel" class="cancel-button">Cancel</button>
                         <button type="submit" name="submit" value="Submit" class="confirm-button">Submit</button>
                     </div>
                 </div>

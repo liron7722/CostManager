@@ -77,6 +77,15 @@ public class ViewModel {
     }
 
     /**
+     * log JS message into app log
+     * @param message the message from JS code
+     */
+    @android.webkit.JavascriptInterface
+    public void log(String message){
+        Log.i(Names.logTAG, message);
+    }
+
+    /**
      * handle the errors in the view.
      * log the error for future review
      * @param message contain the error that occur in the view
@@ -92,11 +101,17 @@ public class ViewModel {
      */
     @android.webkit.JavascriptInterface
     public void previous(){
-        this.view.goBack();
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                view.goBack();
+            }
+        });
+
     }
 
     /**
-     *
+     * check if user logging in
      * @return T/F if user id is logged or not
      */
     @android.webkit.JavascriptInterface
@@ -109,7 +124,7 @@ public class ViewModel {
      * display log out toast after.
      */
     @android.webkit.JavascriptInterface
-    public void logOut(){
+    public void logout(){
         this.sp.edit().putInt(uID,-1).apply();
         Message.message(this.context,"Logged out successfully");
     }
@@ -121,21 +136,29 @@ public class ViewModel {
      * @return true after saved, false if empty parameters send.
      */
     @android.webkit.JavascriptInterface
-    public boolean updateSettings(String key, String value) {
+    public boolean changeSettings(String key, String value) {
+        boolean res = false;
         if (value.isEmpty())
             return false;
         switch (key) {
             case wB:
                 this.sp.edit().putInt(wB,Integer.parseInt(value)).apply();
-                return true;
+                res = true;
+                break;
             case iC:
                 this.sp.edit().putString(iC,value).apply();
-                return true;
+                res = true;
+                break;
             case eC:
                 this.sp.edit().putString(eC,value).apply();
-                return true;
+                res = true;
+                break;
         }
-        return false;
+        if (res)
+            Message.message(this.context, "Update successfully");
+        else
+            Message.message(this.context, "Update failed");
+        return res;
     }
 
     /**
@@ -151,9 +174,9 @@ public class ViewModel {
             case wB:
                 return String.valueOf(sp.getInt(wB, 0));
             case iC:
-                return sp.getString(iC, "green");
+                return sp.getString(iC, "rgba(41, 241, 195, 1)");
             case eC:
-                return sp.getString(eC, "red");
+                return sp.getString(eC, "rgba(246, 36, 89, 1)");
         }
         return "";
     }

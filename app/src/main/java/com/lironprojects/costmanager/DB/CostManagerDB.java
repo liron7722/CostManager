@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.util.Log;
 
 import com.lironprojects.costmanager.Models.CostManagerException;
+import com.lironprojects.costmanager.Models.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +25,7 @@ import java.util.Arrays;
 public class CostManagerDB{
     // local variable
     private SQLiteBasic DBHelper;
+    private Context context;
 
     /**
      * Creating SQLiteBasic helper.
@@ -31,6 +34,7 @@ public class CostManagerDB{
      */
     public CostManagerDB(Context context){
         this.DBHelper = new SQLiteBasic(context);
+        this.context = context;
     }
 
     /**
@@ -48,8 +52,13 @@ public class CostManagerDB{
         values.put(Names.Name, name);
         values.put(Names.Password, password);
         values.put(Names.Email, email);
+        try{
         return this.DBHelper.getWritableDatabase().insert(Names.Profile_Table,
                                                             null, values);
+        }catch (SQLiteConstraintException e){
+            Message.message(this.context, "Email already used.");
+            return -1;
+        }
     }
 
     /**
@@ -185,7 +194,6 @@ public class CostManagerDB{
                 jo.put(Names.Description, cursor.getString(cursor.getColumnIndex(Names.Description)));
                 jo.put(Names.isIncome, cursor.getString(cursor.getColumnIndex(Names.isIncome)));
                 jo.put(Names.PaymentType, cursor.getString(cursor.getColumnIndex(Names.PaymentType)));
-                jo.put(Names.TID, cursor.getInt(cursor.getColumnIndex(Names.TID)));
                 ja.put(jo);
             }
             cursor.close();

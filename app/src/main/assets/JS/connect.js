@@ -18,8 +18,7 @@ function changeUrl(url) {
 $("button#logout").on({
     click: function() {
         log("user clicked log out");
-        window.vm.logOut();
-        changeUrl("welcome.html");
+        window.vm.logout();
     }
 });
 
@@ -32,6 +31,12 @@ $("button.panelButton").on({
 $("button.navbarButton").on({
     click: function() {
         changeUrl(this.value + ".html");
+    }
+});
+
+$("button.cancel-button").on({
+    click: function() {
+        window.vm.previous();
     }
 });
 

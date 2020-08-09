@@ -36,8 +36,14 @@
                 <a href="#" data-rel="close">Close panel</a>
             </div>
         </div><!-- /panel -->
+        <label for="filter"></label><select name="filter" id="filter" required>
+            <option selected="selected" value="0">All</option>
+            <option value="10">Last 10 Transaction</option>
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+        </select>
+        <canvas id="pieChart" width="100px" height="75px"></canvas><hr>
         <canvas id="barChart" width="100px" height="75px"></canvas>
-        <canvas id="pieChart" width="100px" height="75px"></canvas>
     </main>
     <!-- JQuery -->
     <script src="../JS/jquery-1.11.1.min.js"></script>
